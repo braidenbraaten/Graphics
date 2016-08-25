@@ -13,6 +13,7 @@ bool Window::init(int a_width, int a_height, char * a_title)
 
 
 	glfwInit();
+
 	winHandle = glfwCreateWindow(a_width, a_height, a_title, nullptr, nullptr);
 
 	glfwMakeContextCurrent(winHandle);
