@@ -1,8 +1,15 @@
-#include "crenderutils.h"
+#include "window.h"
 
 //this is the develop branch!
 
 int main()
 {
-	test();
+	Window window;
+	window.init();
+	while (window.step());
+
+
+	window.term();
+
+	return 0;
 }

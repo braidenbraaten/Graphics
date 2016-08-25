@@ -8,7 +8,7 @@ private:
 	bool isInitialized = false;
 
 	//forward declare
-	class GLFWwindow *winHandle = nullptr;
+	struct GLFWwindow *winHandle = nullptr;
 
 public:
 
