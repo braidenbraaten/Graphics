@@ -8,8 +8,8 @@ int main()
 	Window window;
 	window.init();
 
-	Vertex vert[3] = { {-.9f,-.9f, 0, 1},
-					   {.4f,.6f, 0, 1},
+	Vertex vert[3] = { {.5f,0.0f, 0, 1},
+					   {-.5f,.6f, 0, 1},
 					   {.9f,.9f, 0, 1} };
 
 	unsigned tris[3] = {0, 1, 2};
