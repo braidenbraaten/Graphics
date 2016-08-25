@@ -3,8 +3,9 @@
 #include "GLEW\glew.h"
 #include "Vertex.h"
 #include "crenderutils.h"
+#include <cstdio>
 
-Geometry makeGeometry(Vertex * verts, size_t vsize, unsigned int * tris, size_t tsize)
+Geometry makeGeometry(const Vertex * verts, size_t vsize,const unsigned int * tris, size_t tsize)
 {
 	Geometry retval;
 	retval.size = tsize;
@@ -44,4 +45,36 @@ void freeGeometry(Geometry &geo)
 	glDeleteBuffers(1, &geo.ibo);
 	glDeleteVertexArrays(1, &geo.vao);
 	geo = { 0,0,0,0 };
+}
+
+Shader makeShader(const char * vsource, const char * fsource)
+{
+	Shader retval;
+
+	retval.handle = glCreateProgram();
+	//create our variables
+	unsigned vs = glCreateShader(GL_VERTEX_SHADER);
+	unsigned fs = glCreateShader(GL_FRAGMENT_SHADER);
+
+	//init our variables
+	glShaderSource(vs, 1, &vsource, NULL);
+	glShaderSource(fs, 1, &fsource, NULL);
+	//compile the shaders
+	glCompileShader(vs);
+	glCompileShader(fs);
+	//link the shaders into a single program
+	glAttachShader(retval.handle, vs);
+	glAttachShader(retval.handle, fs);
+	glLinkProgram(retval.handle);
+	//no longer need these! their functionality has been eaten by the program
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+
+	return retval;
+}
+
+void freeShader(Shader &shad)
+{
+	glDeleteProgram(shad.handle);
+	shad.handle = NULL;
 }
