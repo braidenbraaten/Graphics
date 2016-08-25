@@ -4,11 +4,12 @@
 
 struct Geometry
 {
-	unsigned vbo, ibo, vao, size;
 	// Vertex Buffer Object : an array of vertices
 	// Index Buffer Object  : an array of indices (triangles)
 	// Vertex Array Object  : Groups of two with some formatting
 	// size                 : number of triangles
+	unsigned vbo, ibo, vao, size;
+
 
 };
 
@@ -32,3 +33,5 @@ struct Shader
 
 Shader makeShader(const char *vsource, const char *fsource);
 void freeShader(Shader &);
+
+void draw(const Shader &, const Geometry &);
