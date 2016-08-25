@@ -1,6 +1,4 @@
-#define GLEW_STATIC
-
-#include "GLEW\glew.h"
+#include "gldecs.h"
 #include "Vertex.h"
 #include "crenderutils.h"
 #include <cstdio>
@@ -10,9 +8,9 @@ Geometry makeGeometry(const Vertex * verts, size_t vsize,const unsigned int * tr
 	Geometry retval;
 	retval.size = tsize;
 	//define the variables
-	glCreateBuffers(1, &retval.vbo); //store my vertices
-	glCreateBuffers(1, &retval.ibo); //store my indices
-	glCreateVertexArrays(1, &retval.vao); //store attribute information
+	glGenBuffers(1, &retval.vbo); //store my vertices
+	glGenBuffers(1, &retval.ibo); //store my indices
+	glGenVertexArrays(1, &retval.vao); //store attribute information
 
 	// scope the variables
 	glBindVertexArray(retval.vao); 
@@ -73,10 +71,10 @@ Shader makeShader(const char * vsource, const char * fsource)
 	return retval;
 }
 
-void freeShader(Shader &shad)
+void freeShader(Shader &shader)
 {
-	glDeleteProgram(shad.handle);
-	shad.handle = NULL;
+	glDeleteProgram(shader.handle);
+	shader.handle = NULL;
 }
 
 void draw(const Shader &shader, const Geometry &geometry)
