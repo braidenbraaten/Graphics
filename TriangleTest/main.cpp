@@ -8,11 +8,15 @@ int main()
 	Window window;
 	window.init();
 
-	Vertex vert[3] = { {.5f,0.0f, 0, 1, 1,0,0,1},
+	Vertex vert[6] = { {.5f,0.0f, 0, 1, 1,0,0,1},
 					   {-.5f,.6f, 0, 1, 0,1,0,1},
-					   { .9f,.9f, 0, 1, 0,0,1,1} };
+					   { .9f,.9f, 0, 1, 0,0,1,1},
 
-	unsigned tris[3] = {0, 1, 2};
+					   {0.9f,0.1f,0, 1,0,1,0,1},
+					   { .2f, .1f,0, 1,1,0,0,1},
+					   {-.4f,0.3f,0, 1,1,1,1,1} };
+
+	unsigned tris[6] = {0, 1, 2, 3, 4, 5};
 
 	const char vsource[] =
 						"#version 330\n"
@@ -27,7 +31,7 @@ int main()
 							"out vec4 outColor;"
 							"void main() {outColor = vColor;}";
 
-	Geometry geo = makeGeometry(vert, 3, tris, 3);
+	Geometry geo = makeGeometry(vert, 6, tris, 6);
 	Shader shader = makeShader(vsource, fsource);
 
 	while (window.step())
