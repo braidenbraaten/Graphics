@@ -13,8 +13,7 @@ void main()
 
 
 	outColor = vColor;
-	outColor.g = abs(cos(vPosition.x*100));
-	//outCOlor.r = (cos(vPosition.y*100) +1) /2;
+
 
 
 	

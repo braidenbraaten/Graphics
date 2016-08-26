@@ -123,6 +123,7 @@ Shader loadShader(const char *vpath, const char *fpath)
 
 #define TINYOBJLOADER_IMPLEMENTATION // define this in only one .cc
 #include"OBJ\tiny_obj_loader.h"
+#include <random>
 Geometry loadOBJ(const char*path)
 {
 	//we can use TinOBJ to load the file
@@ -135,15 +136,33 @@ Geometry loadOBJ(const char*path)
 	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, path);
 
 	Vertex *verts = new Vertex[attrib.vertices.size() / 3];
-	for (int i = 0; i < attrib.vertices.size(); i += 3)
-	{
-		verts[i] = { attrib.vertices[i],
-					 attrib.vertices[i+1],
-					 attrib.vertices[i+2], 1};
+	unsigned * tris = new unsigned[shapes[0].mesh.indices.size()];
 
+
+	
+
+	for (int i = 0; i < attrib.vertices.size() / 3; ++i)
+	{
+		verts[i] = { attrib.vertices[i *3],
+					 attrib.vertices[i *3+1],
+					 attrib.vertices[i *3+2], 1};
+
+		verts[i].color[0] = rand() * 1.0f / RAND_MAX;
+		verts[i].color[1] = rand() * 1.0f / RAND_MAX;
+		verts[i].color[2] = rand() * 1.0f / RAND_MAX;
+		verts[i].color[3] = 1;
 	}
 
+	for (int i = 0; i < shapes[0].mesh.indices.size(); ++i)
+	{
+		tris[i] = shapes[0].mesh.indices[i].vertex_index;
+	}
 
+	Geometry retval = makeGeometry(verts, attrib.vertices.size() / 3,
+												     tris, shapes[0].mesh.indices.size());
+
+	delete[] verts;
+	delete[] tris;
 	//we are using our own vertex structure
-	return Geometry();
+	return retval;
 }
