@@ -9,11 +9,15 @@ layout(location = 1)in vec4 color;
 // out sends data to the next step of the pipeline
 out vec4 vColor;
 out vec4 dinosours;
+out vec4 vPosition;
 
 
 void main() 
 {
 	dinosours = (position + color)/2;
 	vColor = color; 
+	vPosition = position;
 	gl_Position = position;
+
+
 }

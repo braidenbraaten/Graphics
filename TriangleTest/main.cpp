@@ -34,8 +34,8 @@ int main()
 							"out vec4 outColor;"
 							"void main() {outColor = vColor;}";
 
-	Geometry geo = makeGeometry(vert, 6, tris, 6);
-	Shader shader1 = makeShader(vsource, fsource);
+	Geometry geo1 = makeGeometry(vert, 6, tris, 6);
+	Geometry geo = loadOBJ("../res/models/cube.obj");
 
 	Shader shader = loadShader("../res/shaders/simpleVert.txt",
 							   "../res/shaders/simpleFrag.txt");

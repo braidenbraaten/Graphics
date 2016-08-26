@@ -120,3 +120,30 @@ Shader loadShader(const char *vpath, const char *fpath)
 
 	return makeShader(vs.c_str(), fs.c_str());
 }
+
+#define TINYOBJLOADER_IMPLEMENTATION // define this in only one .cc
+#include"OBJ\tiny_obj_loader.h"
+Geometry loadOBJ(const char*path)
+{
+	//we can use TinOBJ to load the file
+	//we can extract vertex positions and face data
+	//we can create an array to store that vertex data and face data
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+	std::string err;
+	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, path);
+
+	Vertex *verts = new Vertex[attrib.vertices.size() / 3];
+	for (int i = 0; i < attrib.vertices.size(); i += 3)
+	{
+		verts[i] = { attrib.vertices[i],
+					 attrib.vertices[i+1],
+					 attrib.vertices[i+2], 1};
+
+	}
+
+
+	//we are using our own vertex structure
+	return Geometry();
+}
