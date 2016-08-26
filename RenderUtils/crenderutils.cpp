@@ -71,6 +71,8 @@ Shader makeShader(const char * vsource, const char * fsource)
 	return retval;
 }
 
+
+
 void freeShader(Shader &shader)
 {
 	glDeleteProgram(shader.handle);
@@ -89,4 +91,32 @@ void draw(const Shader &shader, const Geometry &geometry)
 	//IF AN IBO IS BOUND, we don't need to provide any indices.
 	glDrawElements(GL_TRIANGLES, geometry.size, GL_UNSIGNED_INT, 0);
 
+}
+
+#include <string.h>
+#include <fstream>
+#include <istream>
+
+std::string fileToArray(const char *path)
+{
+	std::ifstream infile{ path };
+	std::string file_contents{ std::istreambuf_iterator<char>(infile), 
+							   std::istreambuf_iterator<char>() };
+
+
+	
+	
+
+	return file_contents;
+}
+
+Shader loadShader(const char *vpath, const char *fpath)
+{
+	char vsource[5012]; //max of 5012 characters
+	char fsource[5012]; // will change later
+
+	std::string vs = fileToArray(vpath);
+	std::string fs = fileToArray(fpath);
+
+	return makeShader(vs.c_str(), fs.c_str());
 }
