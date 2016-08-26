@@ -8,6 +8,9 @@ int main()
 	Window window;
 	window.init();
 
+	//clipping space coordinates
+	// -1,1
+	// 1920 x 1080
 	Vertex vert[6] = { {.5f,0.0f, 0, 1, 1,0,0,1},
 					   {-.5f,.6f, 0, 1, 0,1,0,1},
 					   { .9f,.9f, 0, 1, 0,0,1,1},
