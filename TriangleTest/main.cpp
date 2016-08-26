@@ -1,13 +1,16 @@
 #include "window.h"
 #include "crenderutils.h"
 #include "Vertex.h"
+#include "Gallery.h"
 //this is the develop branch!
 
 int main()
 {
 	Window window;
-	window.init();
+	Gallery gallery;
 
+	window.init(600,600);
+	gallery.init();
 	//clipping space coordinates
 	// -1,1
 	// 1920 x 1080
@@ -21,32 +24,16 @@ int main()
 
 	unsigned tris[6] = {0, 5, 2,   1, 4, 5};
 
-	//const char vsource[] =
-	//					"#version 330\n"
-	//					"layout(location = 0)in vec4 position;"
-	//					"layout(location = 1)in vec4 color;"
-	//					"out vec4 vColor;"
-	//					"void main() {vColor = color; gl_Position = position; }";
-
-	//const char fsource[] =
-	//						"#version 150 \n"
-	//						"in vec4 vColor;"
-	//						"out vec4 outColor;"
-	//						"void main() {outColor = vColor;}";
-
-	//Geometry geo1 = makeGeometry(vert, 6, tris, 6);
-
-	Geometry geo = loadOBJ("../res/models/sphere.obj");
-	Shader shader = loadShader("../res/shaders/simpleVert.txt",
-							   "../res/shaders/simpleFrag.txt");
+	float time = 0;
 
 	while (window.step())
 	{
-		draw(shader, geo);
+		time += 0.1667f;
+		draw(gallery.getShader("SIMPLE"), gallery.getObject("SPHERE"),time);
+	
 	}
 
-	freeGeometry(geo);
-	freeShader(shader);
+	gallery.term();
 	window.term();
 
 	return 0;

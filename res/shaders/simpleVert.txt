@@ -8,16 +8,20 @@ layout(location = 1)in vec4 color;
 
 // out sends data to the next step of the pipeline
 out vec4 vColor;
-out vec4 dinosours;
+//out vec4 dinosours;
 out vec4 vPosition;
 
 
+uniform float time = 0.0;
+
 void main() 
 {
-	dinosours = (position + color)/2;
 	vColor = color; 
 	vPosition = position;
 	gl_Position = position;
 
+
+	gl_Position.y += cos(time + position.x) /2;
+	gl_Position.x += sin(time + position.y) / 2;
 
 }

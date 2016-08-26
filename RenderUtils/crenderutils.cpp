@@ -93,6 +93,18 @@ void draw(const Shader &shader, const Geometry &geometry)
 
 }
 
+void draw(const Shader &shader, const Geometry &geometry, float time)
+{
+	glUseProgram(shader.handle);
+	glBindVertexArray(geometry.vao);
+	//gets the location index number of the time variable   -1 = failed
+	int loc = glGetUniformLocation(shader.handle, "time");
+	//makes sure that the time passed in is set for the time var in the shader
+	glUniform1f(loc, time);
+
+	glDrawElements(GL_TRIANGLES, geometry.size, GL_UNSIGNED_INT, 0);
+}
+
 #include <string.h>
 #include <fstream>
 #include <istream>

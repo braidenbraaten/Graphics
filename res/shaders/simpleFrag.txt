@@ -5,16 +5,12 @@
 in vec4 vPosition;
 in vec4 vColor;
 out vec4 outColor;
+
+uniform float time = 0.0;
+
 void main() 
 {
-	//One's Complement (aka , color inversion)
-	//1 - val = One's Complement
-	
-
 
 	outColor = vColor;
-
-
-
-	
+	outColor.r = (cos(time) + 1.0)/2.0;
 }

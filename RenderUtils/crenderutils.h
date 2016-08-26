@@ -40,3 +40,9 @@ Shader loadShader(const char *vpath, const char *fpath);
 void freeShader(Shader &);
 
 void draw(const Shader &, const Geometry &);
+
+//a uniform is any extra data that we want available on the shaders that is NOT apart of the Vertex
+//uniform / 'throughout'
+//all 60 vertices of my sphere will use that same uniform
+
+void draw(const Shader &, const Geometry &, float time);
