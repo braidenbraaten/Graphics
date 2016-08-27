@@ -23,14 +23,15 @@ int main()
 					   {-.4f,0.3f,0, 1,1,1,1,1} };
 
 	unsigned tris[6] = {0, 5, 2,   1, 4, 5};
-
+	Geometry geo = makeGeometry(vert, 6, tris, 6);
 	float time = 0;
 
 	while (window.step())
 	{
 		time += 0.1667f;
+		//draw(gallery.getShader("SIMPLE"), gallery.getObject("CUBE"), time);
 		draw(gallery.getShader("SIMPLE"), gallery.getObject("SPHERE"),time);
-	
+		draw(gallery.getShader("SIMPLE"), geo);
 	}
 
 	gallery.term();

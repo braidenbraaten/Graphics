@@ -13,4 +13,8 @@ void main()
 
 	outColor = vColor;
 	outColor.r = (cos(time) + 1.0)/2.0;
+	outColor.b = (sin(time) + 1.0)/2.0;
+	outColor.a = (sin(time) + 1.0)/2.0;
+	
 }
+//glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);

@@ -21,7 +21,10 @@ void main()
 	gl_Position = position;
 
 
-	gl_Position.y += cos(time + position.x) /2;
-	gl_Position.x += sin(time + position.y) / 2;
+	//gl_Position.y += cos(time + position.x) / 2;
+	//gl_Position.x += sin(time + position.y / 2) / 2;
+	gl_Position.w += cos(time / 10 + color.b +gl_Position.w) / 2;
+	gl_Position.x -= sin(time/ 10 + position.y / 2) / 2;
+	gl_Position.y -= sin(time / 10 + position.x / 2) /2;
 
 }

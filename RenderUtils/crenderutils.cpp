@@ -97,6 +97,10 @@ void draw(const Shader &shader, const Geometry &geometry, float time)
 {
 	glUseProgram(shader.handle);
 	glBindVertexArray(geometry.vao);
+
+	//    WIREFRAME MODE
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	//gets the location index number of the time variable   -1 = failed
 	int loc = glGetUniformLocation(shader.handle, "time");
 	//makes sure that the time passed in is set for the time var in the shader
