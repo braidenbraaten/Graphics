@@ -28,7 +28,7 @@ int main()
 
 	while (window.step())
 	{
-		time += 0.1667f;
+		time += 0.01667f;
 		//draw(gallery.getShader("SIMPLE"), gallery.getObject("CUBE"), time);
 		draw(gallery.getShader("SIMPLE"), gallery.getObject("SPHERE"),time);
 		draw(gallery.getShader("SIMPLE"), geo);
