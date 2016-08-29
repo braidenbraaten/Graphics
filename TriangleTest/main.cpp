@@ -8,7 +8,7 @@ int main()
 {
 	Window window;
 	Gallery gallery;
-
+	//Has to be the first thing to init, because it creates the window
 	window.init(600,600);
 	gallery.init();
 	//clipping space coordinates
