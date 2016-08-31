@@ -2,6 +2,8 @@
 #include "crenderutils.h"
 #include "Vertex.h"
 #include "Gallery.h"
+#include "glm\glm.hpp"
+#include "glm\ext.hpp"
 //this is the develop branch!
 
 int main()
@@ -26,12 +28,37 @@ int main()
 	Geometry geo = makeGeometry(vert, 6, tris, 6);
 	float time = 0;
 
+
+	float IDENTITY[16] = { 1,0,0,0, //Right
+						   0,1,0,0, //Up 
+						   0,0,1,0, //Forward
+						   0,0,0,1};
+
+	glm::mat4 proj, view, model, model2;
+							//x,x,y,y
+	//proj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);
+	proj = glm::perspective(45.f, 1.f, .1f, 10.f);
+	view = glm::lookAt(glm::vec3(5.f,5.f,5.f),
+					   glm::vec3(0.f,0.f,0.f), 
+					   glm::vec3(0,1,0));
+
+	//model = glm::scale(glm::vec3{ .5f,.5f,.5f }) 
+	//	  * glm::translate(glm::vec3(.5f, .1f, .1f));
+
+
 	while (window.step())
 	{
-		time += 0.01667f;
+		time += 0.03667f;
+
+		model = glm::rotate(time, glm::vec3(0, 1, 0));
+		model2 = glm::translate(glm::vec3(1, 0, 1));
 		//draw(gallery.getShader("SIMPLE"), gallery.getObject("CUBE"), time);
-		draw(gallery.getShader("SIMPLE"), gallery.getObject("SPHERE"), time);
-		draw(gallery.getShader("SIMPLE"), geo);
+		draw(gallery.getShader("CAMERA"), gallery.getObject("CUBE"), 
+			glm::value_ptr(model), glm::value_ptr(view), glm::value_ptr(proj));
+
+		draw(gallery.getShader("CAMERA"), gallery.getObject("CUBE"),
+			glm::value_ptr(model2), glm::value_ptr(view), glm::value_ptr(proj));
+		
 	}
 
 	gallery.term();

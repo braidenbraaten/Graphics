@@ -51,8 +51,13 @@ bool Gallery::init()
 {
 	this->loadObjectOBJ("SPHERE", "../res/models/sphere.obj");
 	this->loadObjectOBJ("CUBE","../res/models/cube.obj");
+
+
 	this->loadShader("SIMPLE","../res/shaders/simpleVert.txt",
 								"../res/shaders/simpleFrag.txt");
+
+	this->loadShader("CAMERA", "../res/shaders/cameraVert.txt",
+								"../res/shaders/cameraFrag.txt");
 
 	return true;
 }

@@ -46,3 +46,5 @@ void draw(const Shader &, const Geometry &);
 //all 60 vertices of my sphere will use that same uniform
 
 void draw(const Shader &, const Geometry &, float time);
+
+void draw(const Shader &, const Geometry &, const float M[16], const float V[16], const float P[16]);
