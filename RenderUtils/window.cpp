@@ -40,15 +40,17 @@ bool Window::init(int a_width, int a_height, char * a_title)
 	glewInit();
 	glClearColor(0.0f, 255.0f, 255.0f, 1.0f);
 
-#ifdef _DEBUG
+			//Figure out why this debug is causing an error
 
-	glEnable(GL_DEBUG_OUTPUT);
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-
-	glDebugMessageCallback(GL_errorCallback, NULL);
-	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, 0, true);
-
-#endif
+//#ifdef _DEBUG
+//
+//	glEnable(GL_DEBUG_OUTPUT);
+//	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+//
+//	glDebugMessageCallback(GL_errorCallback, NULL);
+//	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, 0, true);
+//
+//#endif
 
 
 	return true;
