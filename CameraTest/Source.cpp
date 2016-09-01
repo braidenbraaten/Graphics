@@ -2,6 +2,9 @@
 #include "crenderutils.h"
 #include "Timer.h"
 #include "Gallery.h"
+#include "Input.h"
+
+
 #include "glm\glm.hpp"
 #include "glm\ext.hpp"
 //this is the develop branch!
@@ -11,10 +14,12 @@ int main()
 	Window window;
 	Gallery gallery;
 	Timer time;
-	float ct;
+	Input input;
 	//Has to be the first thing to init, because it creates the window
 	window.init(600, 600);
+	
 	gallery.init();
+	input.init(window);
 	//clipping space coordinates
 	// -1,1
 	// 1920 x 1080
@@ -38,12 +43,17 @@ int main()
 	//model = glm::scale(glm::vec3{ .5f,.5f,.5f }) 
 	//	  * glm::translate(glm::vec3(.5f, .1f, .1f));
 
-
+	float ct = 0.0f;
 	while (window.step())
 	{
 		
 		time.step();
-		ct = time.getTotalTime();
+		input.step();
+
+		if (input.getKeyState('D') == Input::DOWN) {ct += time.getDeltaTime();}
+
+		if (input.getKeyState('A') == Input::DOWN) {ct -= time.getDeltaTime();}
+
 
 		view = glm::lookAt(glm::vec3(10.f + cosf(ct) * 5, 0.f, 5.f),
 						   glm::vec3(0.f, 0.f, 0.f),
