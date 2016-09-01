@@ -37,10 +37,8 @@ int main()
 	glm::mat4 proj, view, model, model2;
 							//x,x,y,y
 	//proj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);
-	proj = glm::perspective(45.f, 1.f, .1f, 10.f);
-	view = glm::lookAt(glm::vec3(5.f,5.f,5.f),
-					   glm::vec3(0.f,0.f,0.f), 
-					   glm::vec3(0,1,0));
+	proj = glm::perspective(45.f, 1.f, .1f, 100.f);
+
 
 	//model = glm::scale(glm::vec3{ .5f,.5f,.5f }) 
 	//	  * glm::translate(glm::vec3(.5f, .1f, .1f));
@@ -50,6 +48,10 @@ int main()
 	{
 		time += 0.03667f;
 
+		view = glm::lookAt(glm::vec3(10.f + cosf(time) * 5, 0.f, 5.f),
+						   glm::vec3(0.f, 0.f, 0.f),
+						   glm::vec3(0.f, 1.f, 0.f));
+
 		model = glm::rotate(time, glm::vec3(0, 1, 0));
 		model2 = glm::translate(glm::vec3(1, 0, 1));
 		//draw(gallery.getShader("SIMPLE"), gallery.getObject("CUBE"), time);
@@ -58,6 +60,9 @@ int main()
 
 		draw(gallery.getShader("CAMERA"), gallery.getObject("CUBE"),
 			glm::value_ptr(model2), glm::value_ptr(view), glm::value_ptr(proj));
+
+		draw(gallery.getShader("CAMERA"), gallery.getObject("SPHERE"),
+			glm::value_ptr(model), glm::value_ptr(view), glm::value_ptr(proj));
 		
 	}
 

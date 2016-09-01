@@ -97,6 +97,7 @@ void draw(const Shader &shader, const Geometry &geometry, float time)
 {
 	glUseProgram(shader.handle);
 	glBindVertexArray(geometry.vao);
+	
 
 	//    WIREFRAME MODE
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -114,7 +115,10 @@ void draw(const Shader &s, const Geometry &g,
 {
 
 	glEnable(GL_CULL_FACE);
-
+	glEnable(GL_DEPTH_TEST);
+	
+	//makes it WIREFRAME
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glUseProgram(s.handle);
 	glBindVertexArray(g.vao);
 
