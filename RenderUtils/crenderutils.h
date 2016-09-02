@@ -48,3 +48,11 @@ void draw(const Shader &, const Geometry &);
 void draw(const Shader &, const Geometry &, float time);
 
 void draw(const Shader &, const Geometry &, const float M[16], const float V[16], const float P[16], float time);
+
+
+// color depth -- 24bit  vs 32bit vs 8-bit
+//256 colors: 8-bit
+//32 is around the range that we can see
+// 0-255, #00-#FF
+// #FF #FF #FF #FF, number of chanels in this is 4
+void makeTexture(unsigned width, unsigned height, unsigned format, const unsigned char *pixels);

@@ -1,4 +1,5 @@
 #include "gldecs.h"
+#include "globjects.h"
 #include "Vertex.h"
 #include "crenderutils.h"
 #include <cstdio>
@@ -115,7 +116,7 @@ void draw(const Shader &s, const Geometry &g,
 {
 
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST); //testing Z depth
 	
 	//makes it WIREFRAME
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -129,6 +130,18 @@ void draw(const Shader &s, const Geometry &g,
 	glUniform1f(3, time);
 
 	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}
+
+void makeTexture(unsigned width, unsigned height, unsigned format, const unsigned char * pixels)
+{
+	Texture retval = {0, width, height, format};
+
+	glGenTextures(1, &retval.handle);			//Declaration 
+	glBindTexture(GL_TEXTURE_2D, retval.handle);//Scoping
+
+
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pixels);
+
 }
 
 #include <string.h>
