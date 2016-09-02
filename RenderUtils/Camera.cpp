@@ -14,8 +14,8 @@ void FlyCamera::lookAt(const glm::vec3 &target)
 void FlyCamera::update(const Input &in, const Timer &t)
 {
 	//direction represents our forward direction
-	yaw -= in.getMouseAxisHorizontal() * t.getDeltaTime();
-	pitch -= in.getMouseAxisVertical() * t.getDeltaTime();
+	yaw -= in.getMouseAxisHorizontal() / 200.0f;// *t.getDeltaTime();
+	pitch -= in.getMouseAxisVertical() / 200.0f;// *t.getDeltaTime();
 	
 	pitch = glm::clamp<float>(pitch, -glm::pi<float>() / 2 + 0.0001f, 
 					                  glm::pi<float>() / 2 + 0.0001f);
