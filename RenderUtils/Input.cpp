@@ -2,17 +2,26 @@
 #include "window.h"
 #include "Input.h"
 #include <cstring>
+#include <cstdio>
 
  bool Input::init(const Window &window)
 {
 	
-	memset(keys, 0, 350 * sizeof(keys));
+	memset(keys, 0, sizeof(keys));
 	winHandle = window.winHandle;
 	
+	glfwSetInputMode(winHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	mouseX = 0;
+	mouseY = 0;
+	mouseHorz = 0;
+	mouseVert = 0;
 		
 	return true;
 }
 
+
+ //Input Update
 bool Input::step()
 {
 	for (int i = 0; i < 350; i++)
@@ -34,10 +43,20 @@ bool Input::step()
 			keys[i] = UP;
 		}
 	}
+
+
+	double prevX = mouseX;
+	double prevY = mouseY;
+
+	glfwGetCursorPos(winHandle, &mouseX, &mouseY);
+
+	mouseHorz = mouseX - prevX;
+	mouseVert = mouseY - prevY;
+
 	return true;
 }
 
 bool Input::term()
 {
-	return false;
+	return true;
 }

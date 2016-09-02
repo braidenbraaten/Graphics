@@ -1,4 +1,6 @@
 #include "gldecs.h"
+
+
 #include "window.h"
 #include <cstring>
 #include <cstdio>

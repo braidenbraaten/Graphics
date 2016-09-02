@@ -111,7 +111,7 @@ void draw(const Shader &shader, const Geometry &geometry, float time)
 }
 
 void draw(const Shader &s, const Geometry &g, 
-						const float M[16], const float V[16], const float P[16])
+						const float M[16], const float V[16], const float P[16], float time)
 {
 
 	glEnable(GL_CULL_FACE);
@@ -125,6 +125,8 @@ void draw(const Shader &s, const Geometry &g,
 	glUniformMatrix4fv(0, 1, GL_FALSE, P);
 	glUniformMatrix4fv(1, 1, GL_FALSE, V);
 	glUniformMatrix4fv(2, 1, GL_FALSE, M);
+
+	glUniform1f(3, time);
 
 	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
 }
