@@ -3,8 +3,7 @@
 #include "Gallery.h"
 #include "Timer.h"
 #include "Input.h"
-
-
+#include "Vertex.h"
 #include "Camera.h"
 
 #include "glm\glm.hpp"
@@ -23,10 +22,26 @@ int main()
 	gallery.init();
 	input.init(window);
 	time.init();
+	//yellow color
+	unsigned char pixels[] = {255,255,0};
+	Texture tex = loadTexture("../res/textures/textureTest.jpg");
 
-	//Vertex verts[] = { { 1,1,0,1 },{ 1,-1,0,1 },{ -1,-1,0,1 },{ -1,1,0,1 } };
+	Vertex verts[] = { { 1,1,0,1 },{ 1,-1,0,1 },{ -1,-1,0,1 },{ -1,1,0,1 } };
 
-	//unsigned tris[6] = { 0, 5, 2,   1, 4, 5 };
+	unsigned tris[6] = { 0, 5, 2,   1, 4, 5 };
+
+
+	gallery.loadObjectOBJ("SPHERE", "../res/models/sphere.obj");
+	gallery.loadObjectOBJ("CUBE", "../res/models/cube.obj");
+
+	gallery.loadShader("SIMPLE", "../res/shaders/simpleVert.txt",
+		"../res/shaders/simpleFrag.txt");
+
+	gallery.loadShader("CAMERA", "../res/shaders/cameraVert.txt",
+		"../res/shaders/cameraFrag.txt");
+	gallery.loadShader("TEXTURE", "../res/shaders/texVert.txt",
+		"../res/shaders/texFrag.txt");
+
 
 	glm::mat4 proj, view, model, model2, model3;
 							//x,x,y,y
@@ -68,17 +83,19 @@ int main()
 
 		//Draw each of the objects with the corrisponding shader
 
-		draw(gallery.getShader("CAMERA"), gallery.getObject("CUBE"), 
+
+
+		draw(gallery.getShader("TEXTURE"), gallery.getObject("CUBE"), tex,
 			glm::value_ptr(model), glm::value_ptr(view), glm::value_ptr(proj),ct );
 
-		draw(gallery.getShader("CAMERA"), gallery.getObject("CUBE"),
+		draw(gallery.getShader("TEXTURE"), gallery.getObject("CUBE"), tex, 
 			glm::value_ptr(model2), glm::value_ptr(view), glm::value_ptr(proj),ct);
 
-		draw(gallery.getShader("CAMERA"), gallery.getObject("SPHERE"),
+		draw(gallery.getShader("TEXTURE"), gallery.getObject("SPHERE"),
 			glm::value_ptr(model3), glm::value_ptr(view), glm::value_ptr(proj),ct);
 		
 	}
-
+	freeTexture(tex);
 	//terminate when done
 	input.term();
 	time.term();

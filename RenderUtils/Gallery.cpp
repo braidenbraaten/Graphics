@@ -1,4 +1,7 @@
+#include "gldecs.h"
+#include "crenderutils.h"
 #include "Gallery.h"
+
 
 bool Gallery::makeShader(const char * name, const char * vsource, const char * fsource)
 {
@@ -9,16 +12,32 @@ bool Gallery::makeShader(const char * name, const char * vsource, const char * f
 	}
 	else
 	{
-		//fprintf()
+		fprintf(stderr, "Shader %s already exists!", name);
+		return false;
 	}
 
 }
 
 bool Gallery::loadShader(const char * name, const char * vpath, const char * fpath)
 {
-
+	if (!shaders.count(name))
+	{
 		shaders[name] = ::loadShader(vpath, fpath);
+
+		if (shaders[name].handle == 0)
+		{
+			fprintf(stderr, "Shader %s failed to load correctly!\n", name);
+			shaders.erase(name);
+		}
+
+		fprintf(stderr, "Shader %s successfully loaded!\n", name);
 		return true;
+	}
+	else
+	{
+		fprintf(stderr, "Shader %s already exists!", name);
+		return false;
+	}
 }
 
 bool Gallery::makeObject(const char * name, const Vertex * verts, size_t vsize, const unsigned * tris, size_t tsize)
@@ -49,16 +68,6 @@ const Shader & Gallery::getShader(const char * name)
 
 bool Gallery::init()
 {
-	this->loadObjectOBJ("SPHERE", "../res/models/sphere.obj");
-	this->loadObjectOBJ("CUBE","../res/models/cube.obj");
-
-
-	this->loadShader("SIMPLE","../res/shaders/simpleVert.txt",
-								"../res/shaders/simpleFrag.txt");
-
-	this->loadShader("CAMERA", "../res/shaders/cameraVert.txt",
-								"../res/shaders/cameraFrag.txt");
-
 	return true;
 }
 

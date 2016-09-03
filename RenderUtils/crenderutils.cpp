@@ -3,7 +3,49 @@
 #include "Vertex.h"
 #include "crenderutils.h"
 #include <cstdio>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
+
+void createGrid(unsigned int rows, unsigned int cols)
+{
+	Vertex* aoVertices = new Vertex[rows * cols];
+	for (unsigned int r = 0; r < rows; ++r)
+	{
+		for (unsigned int c = 0; c < cols; ++c)
+		{
+			//	FINISH THIS FUNCTION!
+			//vertToVec4(aoVertices[r * cols + c].position, );
+
+
+		}
+	}
+}
+
+
+Texture loadTexture(const char * path)
+{
+	int w, h, f;
+	unsigned char *p;
+	
+	Texture retval = {0,0,0,0};
+
+	p = stbi_load(path, &w, &h, &f, STBI_default);
+
+	if (!p) return retval;
+
+	switch (f)
+	{
+	case STBI_grey		: f = GL_RED;	break;
+	case STBI_grey_alpha: f = GL_RG;	break;
+	case STBI_rgb       : f = GL_RGB;	break;
+	case STBI_rgb_alpha : f = GL_RGBA;	break;
+	}
+
+	retval = makeTexture(w, h, f, p);
+	stbi_image_free(p);
+	return retval;
+}
 Geometry makeGeometry(const Vertex * verts, size_t vsize,const unsigned int * tris, size_t tsize)
 {
 	Geometry retval;
@@ -66,6 +108,21 @@ Shader makeShader(const char * vsource, const char * fsource)
 	glAttachShader(retval.handle, fs);
 	glLinkProgram(retval.handle);
 	//no longer need these! their functionality has been eaten by the program
+
+	// error handl
+	GLint programStatus = GL_FALSE;
+	glGetProgramiv(retval.handle, GL_LINK_STATUS, &programStatus);
+	if (programStatus != GL_TRUE)
+	{
+		GLsizei log_length = 0;
+		GLchar message[1024];
+
+		glGetProgramInfoLog(retval.handle, 1024, &log_length, message);
+		fprintf(stderr, "%s", message);
+		assert(false && "Shader failed to link!");
+
+	}
+
 	glDeleteShader(vs);
 	glDeleteShader(fs);
 
@@ -111,7 +168,29 @@ void draw(const Shader &shader, const Geometry &geometry, float time)
 	glDrawElements(GL_TRIANGLES, geometry.size, GL_UNSIGNED_INT, 0);
 }
 
-void draw(const Shader &s, const Geometry &g, 
+void draw(const Shader &s, const Geometry &g,
+	const float M[16], const float V[16], const float P[16], float time)
+{
+
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST); //testing Z depth
+
+							 //makes it WIREFRAME
+							 //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glUseProgram(s.handle);
+	glBindVertexArray(g.vao);
+
+	glUniformMatrix4fv(0, 1, GL_FALSE, P);
+	glUniformMatrix4fv(1, 1, GL_FALSE, V);
+	glUniformMatrix4fv(2, 1, GL_FALSE, M);
+
+	glUniform1f(3, time);
+
+
+	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}
+
+void draw(const Shader &s, const Geometry &g, const Texture &t,
 						const float M[16], const float V[16], const float P[16], float time)
 {
 
@@ -129,19 +208,38 @@ void draw(const Shader &s, const Geometry &g,
 
 	glUniform1f(3, time);
 
+	glActiveTexture(GL_TEXTURE0); // look at slot 0
+	glBindTexture(GL_TEXTURE_2D, t.handle); //put it in that slot
+	glUniform1i(4, 0); //second value is texture slot number 
+
 	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
 }
 
-void makeTexture(unsigned width, unsigned height, unsigned format, const unsigned char * pixels)
+Texture makeTexture(unsigned width, unsigned height, unsigned format, const unsigned char * pixels)
 {
 	Texture retval = {0, width, height, format};
 
 	glGenTextures(1, &retval.handle);			//Declaration 
 	glBindTexture(GL_TEXTURE_2D, retval.handle);//Scoping
 
-
+	//							 Mem layout                 number of channels
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pixels);
+	//Texture Parameter Input 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+	//unscope texture
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return retval;
+
+}
+
+
+void freeTexture(Texture &t)
+{
+	glDeleteTextures(1, &t.handle);
+	t = { 0,0,0,0 };
 }
 
 #include <string.h>
@@ -163,8 +261,8 @@ std::string fileToArray(const char *path)
 
 Shader loadShader(const char *vpath, const char *fpath)
 {
-	char vsource[5012]; //max of 5012 characters
-	char fsource[5012]; // will change later
+	//char vsource[5012]; //max of 5012 characters
+	//char fsource[5012]; // will change later
 
 	std::string vs = fileToArray(vpath);
 	std::string fs = fileToArray(fpath);
@@ -175,6 +273,7 @@ Shader loadShader(const char *vpath, const char *fpath)
 #define TINYOBJLOADER_IMPLEMENTATION // define this in only one .cc
 #include"OBJ\tiny_obj_loader.h"
 #include <random>
+
 Geometry loadOBJ(const char*path)
 {
 	//we can use TinOBJ to load the file
