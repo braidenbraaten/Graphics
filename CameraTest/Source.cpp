@@ -30,8 +30,9 @@ int main()
 	//Vertex verts[] = { { 1,1,0,1 },{ 1,-1,0,1 },{ -1,-1,0,1 },{ -1,1,0,1 } };
 
 	unsigned tris[6] = { 0, 5, 2,   1, 4, 5 };
-	gallery.loadObjectOBJ("SPHERE", "../res/models/sphere.obj");
 	gallery.loadObjectOBJ("CUBE", "../res/models/cube.obj");
+	gallery.loadObjectOBJ("SPHERE", "../res/models/sphere.obj");
+
 
 	gallery.loadShader("SIMPLE", "../res/shaders/simpleVert.txt",
 		"../res/shaders/simpleFrag.txt");
@@ -45,8 +46,8 @@ int main()
 	glm::mat4 proj, view, model, model2, model3;
 
 	//   GRID
-	Geometry plane = genGrid(512, 2);
-	Texture noise = genNoise(64, 8);
+	Geometry plane = genGrid(800, 2);
+	Texture noise = genNoise(512, 2);
 
 			//x,x,y,y
 	//proj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);

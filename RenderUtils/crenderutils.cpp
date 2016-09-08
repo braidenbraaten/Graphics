@@ -236,7 +236,7 @@ Texture makeTextureF(unsigned square, const float * pixels)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, square, square, 0, GL_RED, GL_UNSIGNED_BYTE, pixels);
 	//Texture Parameter Input 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -299,32 +299,30 @@ Geometry loadOBJ(const char*path)
 	std::string err;
 	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, path);
 
-	Vertex *verts = new Vertex[attrib.vertices.size() / 3];
-	unsigned * tris = new unsigned[shapes[0].mesh.indices.size()];
+	int vsize = shapes[0].mesh.indices.size();
+
+	Vertex *verts = new Vertex[vsize];
+	unsigned * tris = new unsigned[vsize];
 
 
 	
 
-	for (int i = 0; i < attrib.vertices.size() / 3; ++i)
+	for (int i = 0; i < vsize; ++i)
 	{
-		verts[i].position = { attrib.vertices[i *3],
-					 attrib.vertices[i *3+1],
-					 attrib.vertices[i *3+2], 1};
+		auto &ind = shapes[0].mesh.indices[i];
 
-		verts[i].color[0] = rand() * 1.0f / RAND_MAX;
-		verts[i].color[1] = rand() * 1.0f / RAND_MAX;
-		verts[i].color[2] = rand() * 1.0f / RAND_MAX;
-		verts[i].color[3] = 1;
+		const float *n = &attrib.normals  [ind.normal_index * 3];   // +1,+2,0
+		const float *p = &attrib.vertices [ind.vertex_index * 3];   //+1, +2, 1
+		const float *t = &attrib.texcoords[ind.texcoord_index * 2];//+1
+
+		verts[i].position = glm::vec4(p[0],p[1],p[2],1.f);
+		verts[i].normal =   glm::vec4(n[0],n[1],n[2],0.f);
+		verts[i].texcoord = glm::vec2(t[0],t[1]);
+
+		tris[i] = i; // 0-35
 	}
 
-	for (int i = 0; i < shapes[0].mesh.indices.size(); ++i)
-	{
-		tris[i] = shapes[0].mesh.indices[i].vertex_index;
-	}
-
-	Geometry retval = makeGeometry(verts, attrib.vertices.size() / 3,
-												     tris, shapes[0].mesh.indices.size());
-
+	Geometry retval = makeGeometry(verts, vsize, tris, vsize);
 	delete[] verts;
 	delete[] tris;
 	//we are using our own vertex structure
