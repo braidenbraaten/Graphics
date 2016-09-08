@@ -61,5 +61,7 @@ void draw(const Shader &, const Geometry &,const Texture &t, const float M[16], 
 // #FF #FF #FF #FF, number of chanels in this is 4
 
 Texture makeTexture(unsigned width, unsigned height, unsigned format, const unsigned char *pixels);
+Texture makeTextureF(unsigned square, const float *pixels);
+
 Texture loadTexture(const char* path);
 void freeTexture(Texture &t);

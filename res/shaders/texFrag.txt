@@ -1,15 +1,14 @@
-#version 450
+#version 430
 
 //This is GLSL!
 
-in vec4 vPosition;
-in vec4 vColor;
+in vec2 vtexCoord;
 out vec4 outColor;
 
-layout(location = 0) uniform mat4 Projection;
-layout(location = 1) uniform mat4 View;
-layout(location = 2) uniform mat4 Model;
-layout(location = 3) uniform float time = 0.0;
+//layout(location = 0) uniform mat4 Projection;
+//layout(location = 1) uniform mat4 View;
+//layout(location = 2) uniform mat4 Model;
+//layout(location = 3) uniform float time = 0.0;
 
 
 
@@ -18,7 +17,7 @@ layout(location = 4)uniform sampler2D texMap;
 
 void main() 
 {
-	outColor = texture(texMap,vPosition.xy);
+	outColor = texture(texMap,vtexCoord).rrrr;
 	
 }
 //glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);

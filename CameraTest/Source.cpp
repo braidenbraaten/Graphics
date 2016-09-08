@@ -8,7 +8,7 @@
 
 #include "glm\glm.hpp"
 #include "glm\ext.hpp"
-
+#include "procgen.h"
 
 int main()
 {
@@ -16,6 +16,7 @@ int main()
 	Gallery gallery;
 	Timer time;
 	Input input;
+	
 	//Has to be the first thing to init, because it creates the window
 	window.init(1280, 720);
 	
@@ -26,7 +27,7 @@ int main()
 	unsigned char pixels[] = {255,255,0};
 	Texture tex = loadTexture("../res/textures/textureTest.jpg");
 
-	Vertex verts[] = { { 1,1,0,1 },{ 1,-1,0,1 },{ -1,-1,0,1 },{ -1,1,0,1 } };
+	//Vertex verts[] = { { 1,1,0,1 },{ 1,-1,0,1 },{ -1,-1,0,1 },{ -1,1,0,1 } };
 
 	unsigned tris[6] = { 0, 5, 2,   1, 4, 5 };
 	gallery.loadObjectOBJ("SPHERE", "../res/models/sphere.obj");
@@ -42,7 +43,12 @@ int main()
 
 
 	glm::mat4 proj, view, model, model2, model3;
-							//x,x,y,y
+
+	//   GRID
+	Geometry plane = genGrid(512, 2);
+	Texture noise = genNoise(64, 8);
+
+			//x,x,y,y
 	//proj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);
 	proj = glm::perspective(45.f, 1.f, 1.f, 50.f);
 	
@@ -53,7 +59,7 @@ int main()
 	model3 = glm::translate(glm::vec3(-10, 0, 0)) * glm::rotate(180.f, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(5, 5, 5));
 
 	
-
+	
 	float ct = 0;
 
 	FlyCamera cam;
@@ -66,7 +72,7 @@ int main()
 		
 		time.step();
 		input.step();
-
+		
 		ct += time.getDeltaTime();
 		view = cam.getView();
 		proj = cam.getProjection();
@@ -91,6 +97,11 @@ int main()
 
 		draw(gallery.getShader("TEXTURE"), gallery.getObject("SPHERE"),
 			glm::value_ptr(model3), glm::value_ptr(view), glm::value_ptr(proj),ct);
+
+		//draw(gallery.getShader("TEXTURE"), plane, tex, 
+		//	glm::value_ptr(model3), glm::value_ptr(view), glm::value_ptr(proj), ct);
+		draw(gallery.getShader("TEXTURE"), plane, noise,
+			glm::value_ptr(model3), glm::value_ptr(view), glm::value_ptr(proj), ct);
 		
 	}
 	freeTexture(tex);

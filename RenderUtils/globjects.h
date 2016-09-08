@@ -57,8 +57,18 @@ public:
 struct Vertex
 {
 
-	float position[4];
-	float color[4];
+	glm::vec4 position; // 4
+	glm::vec4 color;
+	glm::vec4 normal;
+	glm::vec2 texcoord;
+	
+	enum 
+	{
+		POSITION = 0,
+		COLOR = 16,
+		NORMAL = 32,
+		TEXCOORD = 48,
+	};
 	//Vertex();
 	////init the vert position values with a vector4
 	//Vertex(const Vector4 vec);

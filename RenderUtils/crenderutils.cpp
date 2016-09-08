@@ -6,20 +6,7 @@
 #include "stb_image.h"
 
 
-void createGrid(unsigned int rows, unsigned int cols)
-{
-	Vertex* aoVertices = new Vertex[rows * cols];
-	for (unsigned int r = 0; r < rows; ++r)
-	{
-		for (unsigned int c = 0; c < cols; ++c)
-		{
-			//	FINISH THIS FUNCTION!
-			//vertToVec4(aoVertices[r * cols + c].position, );
 
-
-		}
-	}
-}
 
 
 Texture loadTexture(const char * path)
@@ -64,12 +51,16 @@ Geometry makeGeometry(const Vertex * verts, size_t vsize,const unsigned int * tr
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, tsize * sizeof(unsigned), tris , GL_STATIC_DRAW);
 
 	// Attributes let us tell openGL how memory is laid out
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(0); //POSITION
+	glEnableVertexAttribArray(1); //COLOR
+	glEnableVertexAttribArray(2); //normal
+	glEnableVertexAttribArray(3); // texCoord
 	
 	// index of the attribute, number of elements, type, normalized?, size of vertex, offset
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)16);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::POSITION);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::COLOR);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::NORMAL);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::TEXCOORD);
 
 	//unscope the variables
 	glBindVertexArray(0);
@@ -234,6 +225,30 @@ Texture makeTexture(unsigned width, unsigned height, unsigned format, const unsi
 
 }
 
+Texture makeTextureF(unsigned square, const float * pixels)
+{
+	Texture retval = { 0, square, square, GL_RED }; 
+
+	glGenTextures(1, &retval.handle);			//Declaration 
+	glBindTexture(GL_TEXTURE_2D, retval.handle);//Scoping
+
+												//							 Mem layout                 number of channels
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, square, square, 0, GL_RED, GL_UNSIGNED_BYTE, pixels);
+	//Texture Parameter Input 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	//unscope texture
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return retval;
+}
+
+
+
 
 void freeTexture(Texture &t)
 {
@@ -292,7 +307,7 @@ Geometry loadOBJ(const char*path)
 
 	for (int i = 0; i < attrib.vertices.size() / 3; ++i)
 	{
-		verts[i] = { attrib.vertices[i *3],
+		verts[i].position = { attrib.vertices[i *3],
 					 attrib.vertices[i *3+1],
 					 attrib.vertices[i *3+2], 1};
 
