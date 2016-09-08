@@ -3,7 +3,7 @@
 #include "Gallery.h"
 #include "Timer.h"
 #include "Input.h"
-#include "Vertex.h"
+#include "globjects.h"
 #include "Camera.h"
 
 #include "glm\glm.hpp"
@@ -29,8 +29,6 @@ int main()
 	Vertex verts[] = { { 1,1,0,1 },{ 1,-1,0,1 },{ -1,-1,0,1 },{ -1,1,0,1 } };
 
 	unsigned tris[6] = { 0, 5, 2,   1, 4, 5 };
-
-
 	gallery.loadObjectOBJ("SPHERE", "../res/models/sphere.obj");
 	gallery.loadObjectOBJ("CUBE", "../res/models/cube.obj");
 

@@ -133,6 +133,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="crenderutils.cpp" />
     <ClCompile Include="Gallery.cpp" />
+    <ClCompile Include="globjects.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="window.cpp" />
@@ -145,7 +146,6 @@
     <ClInclude Include="globjects.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Vertex.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

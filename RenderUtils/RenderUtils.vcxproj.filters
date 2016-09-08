@@ -33,15 +33,15 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="globjects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="crenderutils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gldecs.h">

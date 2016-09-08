@@ -14,7 +14,7 @@
 //};
 
 
-void createGrid(unsigned int, unsigned int);
+//void createGrid(unsigned int, unsigned int);
 
 Geometry makeGeometry(const struct Vertex *verts, size_t vsize, 
 		                const unsigned int *tris, size_t tsize);

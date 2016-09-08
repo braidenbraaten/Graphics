@@ -1,6 +1,5 @@
 #include "gldecs.h"
 #include "globjects.h"
-#include "Vertex.h"
 #include "crenderutils.h"
 #include <cstdio>
 #define STB_IMAGE_IMPLEMENTATION
