@@ -180,6 +180,30 @@ void draw(const Shader &s, const Geometry &g,
 	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
 }
 
+
+
+	void drawPhong(const Shader &s, const Geometry &g,
+	const float M[16], const float V[16], const float P[16])
+{
+
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST); //testing Z depth
+
+							 //makes it WIREFRAME
+							 //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glUseProgram(s.handle);
+	glBindVertexArray(g.vao);
+
+	glUniformMatrix4fv(0, 1, GL_FALSE, P);
+	glUniformMatrix4fv(1, 1, GL_FALSE, V);
+	glUniformMatrix4fv(2, 1, GL_FALSE, M);
+
+
+
+
+	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}
+
 void draw(const Shader &s, const Geometry &g, const Texture &t,
 						const float M[16], const float V[16], const float P[16], float time)
 {

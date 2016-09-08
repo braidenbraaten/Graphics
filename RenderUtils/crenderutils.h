@@ -50,6 +50,7 @@ void draw(const Shader &, const Geometry &, float time);
 
 void draw(const Shader &, const Geometry &,const float M[16], const float V[16], const float P[16], float time);
 
+void drawPhong(const Shader &s, const Geometry &g, const float M[16], const float V[16], const float P[16]);
 
 void draw(const Shader &, const Geometry &,const Texture &t, const float M[16], const float V[16], const float P[16], float time);
 

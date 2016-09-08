@@ -1,0 +1,27 @@
+#version 430
+
+out vec4 outColor;
+in vec4 vNormal;
+
+/*
+	Ambiant Color
+	Diffuse Color
+	Specular Color
+
+
+*/
+
+
+
+void main()
+{
+
+	vec4 lightDirection = normalize(vec4(-1,-1,-1,0));
+	vec4 surfaceColor = vec4(0,1,1,1);
+	vec4 lightColor = vec4(1,1,0,1);	
+
+
+	float term = -dot(vNormal, lightDirection);
+	
+	outColor = surfaceColor * term * lightColor;
+}
