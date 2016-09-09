@@ -39,7 +39,7 @@ int main()
 	{
 		
 		time += .016f;
-		glm::mat4 modelC = glm::rotate(time, glm::normalize(glm::vec3(0, 1, 0)));
+		glm::mat4 modelC = glm::rotate(time / 100, glm::normalize(glm::vec3(0, 1, 0)));
 		//glm::mat4 modelS = glm::translate(glm::vec3(0, cos(time) * 6, 0));
 		drawPhong(shader, cube, glm::value_ptr(modelC),
 							   glm::value_ptr(view),
