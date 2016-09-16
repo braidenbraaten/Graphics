@@ -20,4 +20,3 @@ void main()
 	outColor = texture(texMap,vtexCoord).rrrr;
 	
 }
-//glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);

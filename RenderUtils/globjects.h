@@ -81,6 +81,17 @@ struct Vertex
 
 
 
+struct Framebuffer
+{
+	unsigned handle;
+	unsigned width, height, nColors;
+	
+	Texture depth;
+	Texture colors[8];
+
+};
+
+
 //void generateGrid(unsigned int rows, unsigned int cols)
 //{
 //	Vertex* aoVertices = new Vertex[rows * cols];

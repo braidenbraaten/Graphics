@@ -2,6 +2,8 @@
 #include "globjects.h"
 #include "crenderutils.h"
 #include <cstdio>
+
+#include "glm\gtc\noise.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -60,7 +62,7 @@ Geometry makeGeometry(const Vertex * verts, size_t vsize,const unsigned int * tr
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::POSITION);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::COLOR);
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::NORMAL);
-	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::TEXCOORD);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)Vertex::TEXCOORD);
 
 	//unscope the variables
 	glBindVertexArray(0);
@@ -234,6 +236,35 @@ void draw(const Shader &s, const Geometry &g,
 
 	}
 
+	void drawFB(const Shader & s, const Geometry & g, const Framebuffer & fb,
+		const float M[16], const float V[16], const float P[16],
+		const Texture * T, unsigned t_count)
+	{
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST); //testing Z depth
+
+		glBindFramebuffer(GL_FRAMEBUFFER, fb.handle);
+		glUseProgram(s.handle);
+		glBindVertexArray(g.vao);
+
+		glViewport(0, 0, fb.width, fb.height);
+
+		glUniformMatrix4fv(0, 1, GL_FALSE, P);
+		glUniformMatrix4fv(1, 1, GL_FALSE, V);
+		glUniformMatrix4fv(2, 1, GL_FALSE, M);
+
+		int i = 0;
+		for (; i < t_count; ++i)
+		{
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, T[i].handle);
+			glUniform1i(3 + i, 0 + i);
+		}
+
+		glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+
+	}
+
 void draw(const Shader &s, const Geometry &g, const Texture &t,
 						const float M[16], const float V[16], const float P[16], float time)
 {
@@ -308,6 +339,54 @@ void freeTexture(Texture &t)
 {
 	glDeleteTextures(1, &t.handle);
 	t = { 0,0,0,0 };
+}
+
+Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors)
+{
+	Framebuffer retval = { 0,width,height,nColors };
+
+	glGenFramebuffers(1, &retval.handle);
+	glBindFramebuffer(GL_FRAMEBUFFER, retval.handle);
+
+	// DEPTH TESTING
+	//////////////////////////////////////////////////////////////////////////////////
+	retval.depth = makeTexture(width, height, GL_DEPTH_COMPONENT, 0);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, retval.depth.handle, 0);
+	//////////////////////////////////////////////////////////////////////////////////
+	const GLenum attachments[8] =
+	{
+		GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2,
+		GL_COLOR_ATTACHMENT3,GL_COLOR_ATTACHMENT4,GL_COLOR_ATTACHMENT5,
+		GL_COLOR_ATTACHMENT6,GL_COLOR_ATTACHMENT7 };
+
+	for (int i = 0; i < nColors && i < 8; ++i)
+	{
+		retval.colors[i] = makeTexture(width, height, GL_RGBA, 0);
+		glFramebufferTexture(GL_FRAMEBUFFER, attachments[i], retval.colors[i].handle, 0);
+	}
+
+	glDrawBuffers(nColors, attachments);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return retval;
+}
+
+void FreeFramebuffer(Framebuffer &fb)
+{
+	for (unsigned i = 0; i < fb.nColors; ++i)
+	{
+		freeTexture(fb.colors[i]);
+
+		glDeleteFramebuffers(1, &fb.handle);
+		fb = { 0,0,0,0 };
+	}
+}
+
+void clearFramebuffer(const Framebuffer &f)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, f.handle);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 }
 
 #include <string.h>

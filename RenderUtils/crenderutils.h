@@ -53,6 +53,10 @@ void draw(const Shader &, const Geometry &,const float M[16], const float V[16],
 void drawPhong(const Shader &s, const Geometry &g, const float M[16], const float V[16], const float P[16]);
 void drawPhong(const Shader &s, const Geometry &g, const float M[16], const float V[16], const float P[16], const Texture *T, unsigned t_count);
 
+void drawFB(const Shader &s, const Geometry &g,const Framebuffer &fb,
+	const float M[16], const float V[16], const float P[16], 
+	const Texture *T, unsigned t_count);
+
 void draw(const Shader &, const Geometry &,const Texture &t, const float M[16], const float V[16], const float P[16], float time);
 
 
@@ -67,3 +71,7 @@ Texture makeTextureF(unsigned square, const float *pixels);
 
 Texture loadTexture(const char* path);
 void freeTexture(Texture &t);
+
+Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors);
+void FreeFramebuffer(Framebuffer &);
+void clearFramebuffer(const Framebuffer &);
