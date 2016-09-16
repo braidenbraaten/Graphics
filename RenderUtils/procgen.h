@@ -1,6 +1,6 @@
 #pragma once
 
-#include "globjects.h"
+#include "globjs.h"
 //Generate grid
 //                               how big is the grid
 Geometry genGrid(unsigned sqr, float dim);

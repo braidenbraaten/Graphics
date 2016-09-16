@@ -3,10 +3,13 @@
 #include "crenderutils.h"
 #include "window.h"
 #include "Input.h"
-#include "Camera.h"
-#include "GLM\glm.hpp"
-#include "GLM\ext.hpp"
-#include "Timer.h"
+#include "Vertex.h"
+
+
+#include "glm\glm.hpp"
+#include "glm\ext.hpp"
+
+
 int main()
 {
 	Window	window;
@@ -38,11 +41,8 @@ int main()
 	Framebuffer frame = makeFramebuffer(1280, 720, 3);
 	Framebuffer screen = { 0,1280,720,1 };
 
-	Vertex verts[] = { {{-1,-1,0,1},{},{},{0,0}},
-					   {{ 1,-1,0,1},{},{},{1,0}},
-					   {{ 1,1,0,1},{},{},{1,1}},
-					   {{-1,1,0,1},{},{},{0,1}} };
-	unsigned tris[] = {0,1,2,2,3,0};
+
+	
 
 	Shader post = loadShader("../res/shaders/postVert.txt", 
 							 "../res/shaders/postFrag.txt");

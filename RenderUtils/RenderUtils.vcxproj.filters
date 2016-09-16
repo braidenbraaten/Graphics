@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{cafc0015-ab66-4479-92be-c0be903643dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Release">
+      <UniqueIdentifier>{2ee80723-ba01-41e7-abd5-6d23e153a3b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLSTUFF">
+      <UniqueIdentifier>{0d505bc2-5950-49d6-b56c-c6e1643db512}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="crenderutils.cpp">
@@ -33,10 +42,16 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="globjects.cpp">
+    <ClCompile Include="procgen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="procgen.cpp">
+    <ClCompile Include="glload.cpp">
+      <Filter>GLSTUFF</Filter>
+    </ClCompile>
+    <ClCompile Include="glmake.cpp">
+      <Filter>GLSTUFF</Filter>
+    </ClCompile>
+    <ClCompile Include="gldraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -45,9 +60,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gldecs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gallery.h">
@@ -62,10 +74,25 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="globjects.h">
+    <ClInclude Include="procgen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="procgen.h">
+    <ClInclude Include="gldecs.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="glload.h">
+      <Filter>GLSTUFF</Filter>
+    </ClInclude>
+    <ClInclude Include="glmake.h">
+      <Filter>GLSTUFF</Filter>
+    </ClInclude>
+    <ClInclude Include="globjs.h">
+      <Filter>GLSTUFF</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>GLSTUFF</Filter>
+    </ClInclude>
+    <ClInclude Include="gldraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

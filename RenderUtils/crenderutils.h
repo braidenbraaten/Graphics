@@ -1,7 +1,16 @@
 #pragma once
-#include "globjects.h"
 
 
+#include "Vertex.h"
+#include "window.h"
+
+
+#include "globjs.h"
+#include "glmake.h"
+#include "glload.h"
+#include "gldraw.h"
+
+/*
 //struct Geometry
 //{
 //	// Vertex Buffer Object : an array of vertices
@@ -75,3 +84,5 @@ void freeTexture(Texture &t);
 Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors);
 void FreeFramebuffer(Framebuffer &);
 void clearFramebuffer(const Framebuffer &);
+
+*/
