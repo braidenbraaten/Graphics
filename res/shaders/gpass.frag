@@ -1,6 +1,5 @@
-#version 430
 
-out vec4 outColor;
+#version 430
 
 in vec3 vPosition;
 in vec3 vNormal;
@@ -10,35 +9,32 @@ layout(location = 3) uniform sampler2D diffuseMap;
 layout(location = 4) uniform sampler2D normalMap;
 layout(location = 5) uniform sampler2D specularMap;
 
-mat3 cotangent_frame(in vec3 N,  in vec3 P, in vec2 UV);
+mat3 cotangent_frame(in vec3 N, in vec3 p, in vec2 uv);
 
 layout(location = 0) out vec4 albedo;
 layout(location = 1) out vec4 normal;
 layout(location = 2) out vec4 specular;
 layout(location = 3) out vec4 position;
 
-
-
 void main()
 {
-	mat3 TBN = contangent_frame(vNormal, vPosition, vUV);
-vec3 N = TBN * (texture(normalMap, vUV).xyz * 2 - 1);
+	mat3 TBN = cotangent_frame(vNormal, vPosition, vUV);
+	vec3 N = TBN * (texture(normalMap, vUV).xyz * 2 - 1);
 
-albedo = texture(diffuseMap, vUV);
-normal = vec4(N, 0);
-specular = texture(specularMap, vUV);
-position = vec4(vPosition, 1);	
-
-	
+	albedo   = texture(diffuseMap, vUV);
+	normal   = vec4(N,0);
+	specular = texture(specularMap, vUV);
+	position = vec4(vPosition,1);
 }
 
-mat3 cotangent_frame( in vec3 N, in vec3 p, in vec2 UV )
+
+mat3 cotangent_frame( in vec3 N, in vec3 p, in vec2 uv )
 {
 	// rate of change of position is velocity, which is a direction!
     vec3 dp1  = dFdx( p );
     vec3 dp2  = dFdy( p );
-    vec2 duv1 = dFdx( UV );
-    vec2 duv2 = dFdy( UV );
+    vec2 duv1 = dFdx( uv );
+    vec2 duv2 = dFdy( uv );
 
 	// get right angles for all of our directions!
     vec3 dp2perp = cross( dp2, N ); // determine right
