@@ -10,11 +10,16 @@ void main()
 
 	Geometry quad = makeGeometry(quad_verts, 4, quad_tris, 6);
 	Geometry spear = loadOBJ("../res/models/soulspear.obj");
+	Geometry cube = loadOBJ("../res/models/cube.obj");
+
+
 
 	Texture spear_normal = loadTexture("../res/textures/soulspear_normal.tga");
 	Texture spear_diffuse = loadTexture("../res/textures/soulspear_diffuse.tga");
 	Texture spear_specular = loadTexture("../res/textures/soulspear_specular.tga");
 
+	const unsigned char norm_pixels[4] = {127, 127, 255, 255};
+	Texture vertex_normals = makeTexture(1, 1, 4, norm_pixels);
 
 	Shader gpass = loadShader("../res/shaders/gpass.vert",
 		"../res/shaders/gpass.frag");
@@ -30,9 +35,9 @@ void main()
 
 	
 	Framebuffer screen = { 0, 1280, 720 };
-	Framebuffer gframe = makeFramebuffer(1280, 720, 4);
-	Framebuffer lframe = makeFramebuffer(1280, 720, 2);
-	Framebuffer nframe = makeFramebuffer(1280, 720, 1);
+	Framebuffer gframe = makeFramebuffer(1280, 720, 4);//Geo buffer
+	Framebuffer lframe = makeFramebuffer(1280, 720, 2);//light buffer
+	Framebuffer nframe = makeFramebuffer(1280, 720, 1);//blur buffer
 	glm::mat4 model, view, proj;
 
 	model = glm::translate(glm::vec3(0, -1, 0));
@@ -53,6 +58,14 @@ void main()
 		// Geometry Pass
 		tdraw(gpass, spear, gframe, model, view, proj,
 			spear_diffuse, spear_normal, spear_specular);
+
+		tdraw(gpass, quad, gframe, 
+			glm::rotate(45.f, glm::vec3(0, -1, 0)) *
+			glm::translate(glm::vec3(0, 0, -2)) * glm::scale(glm::vec3(2,2,1)), view, proj,
+			vertex_normals, vertex_normals, spear_specular);
+
+		tdraw(gpass, cube, gframe, model, view, proj,
+			vertex_normals, vertex_normals, vertex_normals);
 		// Blur info pass
 		tdraw(blur, quad, nframe, gframe.colors[1]);
 
