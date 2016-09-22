@@ -20,15 +20,19 @@ void main()
 		"../res/shaders/gpass.frag");
 
 	Shader lpass = loadShader("../res/shaders/lpass.vert",
-		"../res/shaders/lpass.frag");
+		"../res/shaders/lpass.frag", false, true);
 
 	Shader post = loadShader("../res/shaders/quad.vert",
-		"../res/shaders/quad.frag");
+		"../res/shaders/quad.frag", false);
 
+	Shader blur = loadShader("../res/shaders/post.vert",
+		"../res/shaders/post.frag", false);
+
+	
 	Framebuffer screen = { 0, 1280, 720 };
 	Framebuffer gframe = makeFramebuffer(1280, 720, 4);
 	Framebuffer lframe = makeFramebuffer(1280, 720, 2);
-
+	Framebuffer nframe = makeFramebuffer(1280, 720, 1);
 	glm::mat4 model, view, proj;
 
 	model = glm::translate(glm::vec3(0, -1, 0));
@@ -42,16 +46,19 @@ void main()
 		time += 0.016f;
 		ClearFramebuffer(gframe);
 		ClearFramebuffer(lframe);
+		ClearFramebuffer(nframe);
 
 		model = glm::rotate(time, glm::vec3(0, 1, 0)) * glm::translate(glm::vec3(0, -1, 0));
 
 		// Geometry Pass
 		tdraw(gpass, spear, gframe, model, view, proj,
 			spear_diffuse, spear_normal, spear_specular);
+		// Blur info pass
+		tdraw(blur, quad, nframe, gframe.colors[1]);
 
 		// Lighting pass
 		tdraw(lpass, quad, lframe, view, proj,
-			gframe.colors[0], gframe.colors[1],
+			gframe.colors[0], nframe.colors[0], //uses the normal data from the blur pass
 			gframe.colors[2], gframe.colors[3],
 			gframe.depth);
 

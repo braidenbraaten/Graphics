@@ -8,6 +8,25 @@ void ClearFramebuffer(const Framebuffer & r)
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 }
 
+
+void useShaderFlags(const Shader &s)
+{
+	if (s.depthTest)
+		glEnable(GL_DEPTH_TEST);
+	else glDisable(GL_DEPTH_TEST);
+
+	if (s.faceCulling)
+		glEnable(GL_CULL_FACE);
+	else glDisable(GL_CULL_FACE);
+
+		if (s.additiveBlend)
+		{
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_ONE, GL_ONE); //recipes for different effects
+		}
+		else glDisable(GL_BLEND);
+}
+
 void tdraw_internal::tdraw_begin(const Shader & s, const Geometry & g, const Framebuffer & r)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, r.handle);

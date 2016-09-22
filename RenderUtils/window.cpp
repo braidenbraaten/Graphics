@@ -29,7 +29,7 @@ bool Window::init(int a_width, int a_height, char * a_title)
 	width = a_width;
 	height = a_height;
 	strcpy_s(title, 64, a_title);
-
+	
 
 	glfwInit();
 
@@ -40,7 +40,8 @@ bool Window::init(int a_width, int a_height, char * a_title)
 
 	glewExperimental = true;
 	glewInit();
-	glClearColor(0.0f, 255.0f, 255.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); //the color of everything else
+	
 
 			//Figure out why this debug is causing an error
 

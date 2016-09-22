@@ -6,6 +6,7 @@ class Timer
 	float currentTime;
 	float prevTime;
 	float deltaTime;
+	
 
 public:
 	bool init();

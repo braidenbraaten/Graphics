@@ -28,7 +28,7 @@ std::string fileToArray(const char *path)
 	return file_contents;
 }
 
-Shader loadShader(const char *vpath, const char *fpath)
+Shader loadShader(const char *vpath, const char *fpath, bool depth, bool add, bool face)
 {
 	//char vsource[5012]; //max of 5012 characters
 	//char fsource[5012]; // will change later
@@ -36,7 +36,7 @@ Shader loadShader(const char *vpath, const char *fpath)
 	std::string vs = fileToArray(vpath);
 	std::string fs = fileToArray(fpath);
 
-	return makeShader(vs.c_str(), fs.c_str());
+	return makeShader(vs.c_str(), fs.c_str(), depth, add, face);
 }
 
 
@@ -52,14 +52,6 @@ Texture loadTexture(const char * path)
 	p = stbi_load(path, &w, &h, &f, STBI_default);
 
 	if (!p) return retval;
-
-	switch (f)
-	{
-	case STBI_grey: f = GL_RED;	break;
-	case STBI_grey_alpha: f = GL_RG;	break;
-	case STBI_rgb: f = GL_RGB;	break;
-	case STBI_rgb_alpha: f = GL_RGBA;	break;
-	}
 
 	retval = makeTexture(w, h, f, p);
 	stbi_image_free(p);
