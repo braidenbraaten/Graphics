@@ -10,7 +10,7 @@ void main()
 
 	Geometry quad = makeGeometry(quad_verts, 4, quad_tris, 6);
 	Geometry spear = loadOBJ("../res/models/soulspear.obj");
-	Geometry cube = loadOBJ("../res/models/cube.obj");
+	Geometry cube = loadOBJ("../res/models/sphere.obj");
 
 
 
@@ -20,6 +20,10 @@ void main()
 
 	const unsigned char norm_pixels[4] = {127, 127, 255, 255};
 	Texture vertex_normals = makeTexture(1, 1, 4, norm_pixels);
+
+
+	const unsigned char white_pixels[4] = {255,255,255,255};
+	Texture white = makeTexture(1, 1, 4, white_pixels);
 
 	Shader gpass = loadShader("../res/shaders/gpass.vert",
 		"../res/shaders/gpass.frag");
@@ -59,21 +63,33 @@ void main()
 		tdraw(gpass, spear, gframe, model, view, proj,
 			spear_diffuse, spear_normal, spear_specular);
 
+		tdraw(gpass, cube, gframe, model, view, proj,
+			white, vertex_normals, white);
+
+
 		tdraw(gpass, quad, gframe, 
 			glm::rotate(45.f, glm::vec3(0, -1, 0)) *
 			glm::translate(glm::vec3(0, 0, -2)) * glm::scale(glm::vec3(2,2,1)), view, proj,
-			vertex_normals, vertex_normals, spear_specular);
+			white, vertex_normals, white);
 
-		tdraw(gpass, cube, gframe, model, view, proj,
-			vertex_normals, vertex_normals, vertex_normals);
 		// Blur info pass
 		tdraw(blur, quad, nframe, gframe.colors[1]);
 
 		// Lighting pass
 		tdraw(lpass, quad, lframe, view, proj,
-			gframe.colors[0], nframe.colors[0], //uses the normal data from the blur pass
+			gframe.colors[0], gframe.colors[1], //uses the normal data from the blur pass
 			gframe.colors[2], gframe.colors[3],
-			gframe.depth);
+			gframe.depth, glm::normalize(glm::vec4(1,-1,-1,0)),glm::vec4(1,0,0,1) );
+
+		tdraw(lpass, quad, lframe, view, proj,
+			gframe.colors[0], gframe.colors[1], //uses the normal data from the blur pass
+			gframe.colors[2], gframe.colors[3],
+			gframe.depth, glm::normalize(glm::vec4(1, 1, -1, 0)), glm::vec4(0, 1, 0, 1));
+
+		tdraw(lpass, quad, lframe, view, proj,
+			gframe.colors[0], gframe.colors[1], //uses the normal data from the blur pass
+			gframe.colors[2], gframe.colors[3],
+			gframe.depth, glm::normalize(glm::vec4(-1, -1, 1, 0)), glm::vec4(0, 0, 1, 1));
 
 		// Debug Rendering Stuff.
 		for (int i = 0; i < 4; ++i)

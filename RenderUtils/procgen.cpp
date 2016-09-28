@@ -55,38 +55,38 @@ Geometry genGrid(unsigned sqr, float dim)
 }
 
 #include "glm\gtc\noise.hpp"
-Texture genNoise(unsigned sqr, unsigned octaves)
-{
-	
-	float *noise = new float[sqr*sqr]; //float [sqr][sqr]
-	float scale = 1.f / sqr * 3.f;
-
-	for (int x = 0; x < sqr; x++)
-	{
-
-
-		for (int y = 0; y < sqr; y++)
-		{
-
-			float amplitude = 1.f;
-			float persistence = 0.25f;
-
-			noise[y*sqr + x] = 0;
-
-			for (int o = 0; o < octaves; ++o)
-			{
-
-				float freq = powf(2, 0);
-				float data = glm::perlin(glm::vec2(x, y)* scale * freq) * 0.5f + 0.5f;
-				noise[y*sqr + x] += data * amplitude;
-				amplitude *= persistence;
-			}
-
-		}
-	}
-
-	Texture retval = makeTextureF(sqr, noise);
-
-	delete[] noise;
-	return retval;
-}
+//Texture genNoise(unsigned sqr, unsigned octaves)
+//{
+//	
+//	float *noise = new float[sqr*sqr]; //float [sqr][sqr]
+//	float scale = 1.f / sqr * 3.f;
+//
+//	for (int x = 0; x < sqr; x++)
+//	{
+//
+//
+//		for (int y = 0; y < sqr; y++)
+//		{
+//
+//			float amplitude = 1.f;
+//			float persistence = 0.25f;
+//
+//			noise[y*sqr + x] = 0;
+//
+//			for (int o = 0; o < octaves; ++o)
+//			{
+//
+//				float freq = powf(2, 0);
+//				float data = glm::perlin(glm::vec2(x, y)* scale * freq) * 0.5f + 0.5f;
+//				noise[y*sqr + x] += data * amplitude;
+//				amplitude *= persistence;
+//			}
+//
+//		}
+//	}
+//
+//	Texture retval = makeTextureF(sqr, noise);
+//
+//	delete[] noise;
+//	return retval;
+//}

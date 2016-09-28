@@ -14,10 +14,10 @@ void freeShader(Shader &);
 
 //bool to switch between floats and bytes
 //int for number of channels
-Texture makeTexture(unsigned width, unsigned height, unsigned format, const unsigned char *pixels);
-Texture makeTexture(unsigned width, unsigned height, unsigned channels, const unsigned char *pixels);
+//Texture makeTexture(unsigned width, unsigned height, unsigned format, const unsigned char *pixels);
+Texture makeTexture(unsigned width, unsigned height, unsigned channels, const void *pixels, bool isFloat = false);
 
-Texture makeTextureF(unsigned square, const float *pixels);
+
 void freeTexture(Texture &t);
 
 Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors);

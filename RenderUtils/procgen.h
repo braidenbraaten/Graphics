@@ -7,4 +7,4 @@ Geometry genGrid(unsigned sqr, float dim);
 
 //make some noise
 //                size of tex, num of patterns
-Texture genNoise(unsigned sqr, unsigned octaves);
+//Texture genNoise(unsigned sqr, unsigned octaves);

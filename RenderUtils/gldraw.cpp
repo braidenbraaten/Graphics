@@ -68,6 +68,12 @@ size_t tdraw_internal::tdraw_format(size_t idx, size_t tex, const glm::vec3 & va
 	return 0;
 }
 
+size_t tdraw_internal::tdraw_format(size_t idx, size_t tex, const glm::vec4 & val)
+{
+	glUniform4fv(idx, 1, glm::value_ptr(val));
+	return 0;
+}
+
 
 size_t tdraw_internal::tdraw_format(size_t idx, size_t tex, int val)
 {

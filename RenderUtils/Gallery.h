@@ -18,7 +18,7 @@ public:
 
 	bool makeShader(const char *name, const char *vsource, const char *fsource);
 	bool loadShader(const char *name, const char *vpath  , const char *fpath  );
-
+	
 	bool makeObject(const char *name, const Vertex *verts, size_t vsize, const unsigned *tris, size_t tsize);
 
 	bool loadObjectOBJ(const char *name, const char *path);
