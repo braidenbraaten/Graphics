@@ -89,8 +89,8 @@ void freeShader(Shader &shader)
 
 Texture makeTexture(unsigned width, unsigned height, unsigned channels, const void *pixels, bool isFloat)
 {
-	GLenum eformat = GL_RGBA; //num of channels goes
-	GLenum iformat = isFloat ? GL_RGBA32F : eformat; //num of channels and the type
+	GLenum eformat = GL_RGBA; //num of channels going in to the texture
+	GLenum iformat = isFloat ? GL_RGBA32F : eformat; //how to store the data coming from eformat
 	switch (channels)
 	{
 	case 0: eformat = GL_DEPTH_COMPONENT; iformat = GL_DEPTH24_STENCIL8;  break;
@@ -127,11 +127,8 @@ void freeTexture(Texture &t)
 }
 
 //the screen width, height, and number of colors for output
-Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors)
+Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors, const bool *isfloat, const int *channels)
 {
-	glog("TODO", "Find a way to implement state management.");
-	glog("TODO", "Better implementation of the depth buffer.");
-	glog("TODO", "Provide more options? enable/disable stencil/depth buffers.");
 
 	Framebuffer retval = { 0,width,height,nColors };
 
@@ -148,7 +145,7 @@ Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors)
 
 	for (int i = 0; i < nColors && i < 8; ++i)
 	{
-		retval.colors[i] = makeTexture(width, height, 4, 0);
+		retval.colors[i] = makeTexture(width, height, channels && channels[i] != 0? channels[i] : 4, 0, isfloat ? isfloat[i] : false);
 		glFramebufferTexture(GL_FRAMEBUFFER, attachments[i],
 			retval.colors[i].handle, 0);
 	}

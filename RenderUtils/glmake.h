@@ -20,5 +20,5 @@ Texture makeTexture(unsigned width, unsigned height, unsigned channels, const vo
 
 void freeTexture(Texture &t);
 
-Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors);
+Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors, const bool *isfloat = nullptr, const int *channels = nullptr);
 void FreeFramebuffer(Framebuffer &);
