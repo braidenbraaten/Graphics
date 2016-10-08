@@ -18,6 +18,9 @@ layout(location = 3) out vec4 position;
 
 void main()
 {
+
+
+
 	mat3 TBN = cotangent_frame(vNormal, vPosition, vUV);
 	vec3 N = TBN * (texture(normalMap, vUV).xyz * 2 - 1);
 

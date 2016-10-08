@@ -29,5 +29,7 @@
     <None Include="spass.vert" />
     <None Include="lspass.vert" />
     <None Include="lspass.frag" />
+    <None Include="lensflare.vert" />
+    <None Include="lensflare.frag" />
   </ItemGroup>
 </Project>

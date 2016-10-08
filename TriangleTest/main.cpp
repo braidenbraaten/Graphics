@@ -8,14 +8,21 @@ void main()
 {
 	Window context;
 	context.init(1280, 720);
-
+	FlyCamera flyCam;
+	Input playerInput;
+	Timer timer;
+	timer.init();
+	playerInput.init(context);
+	
 	Geometry quad = makeGeometry(quad_verts, 4, quad_tris, 6);
+	Geometry haloQuad = makeGeometry(quad_verts, 4, quad_tris, 6);
 	Geometry spear = loadOBJ("../res/models/soulspear.obj");
 	Geometry sphere = loadOBJ("../res/models/sphere.obj");
 
 	Texture spear_normal = loadTexture("../res/textures/soulspear_normal.tga");
 	Texture spear_diffuse = loadTexture("../res/textures/soulspear_diffuse.tga");
 	Texture spear_specular = loadTexture("../res/textures/soulspear_specular.tga");
+	Texture HaloTexture = loadTexture("../res/textures/halotex.jpg");
 
 	const unsigned char norm_pixels[4] = { 127, 127, 255, 255 };
 	Texture vertex_normals = makeTexture(1, 1, 4, norm_pixels);
@@ -47,8 +54,9 @@ void main()
 
 
 	// Camera information
-	glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, 4), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::mat4 camProj = glm::perspective(45.f, 1280.f / 720, 1.f, 100.f);
+	//glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, 4), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	//glm::mat4 camProj = glm::perspective(45.f, 1280.f / 720, 1.f, 100.f);
+	
 
 	// Model Matrices
 	glm::mat4 spearModel; // ROTATES in main
@@ -61,27 +69,36 @@ void main()
 
 	glm::mat4   redView = glm::lookAt(glm::normalize(-glm::vec3(1, -1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	glm::vec4   redColor = glm::vec4(1, 0, 0, 1);
-
+	glm::vec4   normalColor = glm::vec4(1, 1, 1, 1);
 	glm::mat4 greenView = glm::lookAt(glm::normalize(-glm::vec3(1, 1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	glm::vec4 greenColor = glm::vec4(0, 1, 0, 1);
+
+	
+	glm::mat4 halotexModel;
 
 	float time = 0;
 
 	while (context.step())
 	{
 		time += 0.016f;
+		timer.step();
+		playerInput.step();
+		flyCam.update(playerInput, timer);
+		
+		// Rotate objects
 		spearModel = glm::rotate(time, glm::vec3(0, 1, 0)) * glm::translate(glm::vec3(0, -1, 0));
-
+		halotexModel = glm::rotate(time, glm::vec3(0,glm::sin(time),0)) *glm::translate(glm::vec3(1, 1, 1));
 
 		/////////////////////////////////////////////////////
 		// Geometry Pass
 		//
 		ClearFramebuffer(gframe);
-		tdraw(gpass, spear, gframe, spearModel, camView, camProj, spear_diffuse, spear_normal, spear_specular);
-		tdraw(gpass, sphere, gframe, sphereModel, camView, camProj, white, vertex_normals, white);
-		tdraw(gpass, quad, gframe, wallModel, camView, camProj, white, vertex_normals, white);
+		tdraw(gpass, spear, gframe, spearModel, flyCam.getView(), flyCam.getProjection(), spear_diffuse, spear_normal, spear_specular);
+		tdraw(gpass, sphere, gframe, sphereModel, flyCam.getView(), flyCam.getProjection(), white, vertex_normals, white);
+		tdraw(gpass, quad, gframe, wallModel, flyCam.getView(), flyCam.getProjection(), white, vertex_normals, white);
 
-		//tdraw(blur, quad, nframe, gframe.colors[1]);
+
+		tdraw(gpass, haloQuad, gframe, halotexModel,flyCam.getView(), flyCam.getProjection(), HaloTexture, vertex_normals, white);
 
 		/////////////////////////////////////////////////////
 		//// Light pass!
@@ -95,8 +112,9 @@ void main()
 		tdraw(spass, spear, sframe, spearModel, redView, lightProj);
 		tdraw(spass, sphere, sframe, sphereModel, redView, lightProj);
 		tdraw(spass, quad, sframe, wallModel, redView, lightProj);
+		tdraw(spass, haloQuad, sframe, halotexModel, redView, lightProj);
 		// Light Aggregation
-		tdraw(lpass, quad, lframe, camView,
+		tdraw(lpass, quad, lframe, flyCam.getView(),
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],//geo info
 			sframe.depth, redColor, redView, lightProj); //light info
 
@@ -108,8 +126,9 @@ void main()
 		tdraw(spass, spear, sframe, spearModel, greenView, lightProj);
 		tdraw(spass, sphere, sframe, sphereModel, greenView, lightProj);
 		tdraw(spass, quad, sframe, wallModel, greenView, lightProj);
+		tdraw(spass, haloQuad, sframe, halotexModel, greenView, lightProj);
 		// add the green light now.
-		tdraw(lpass, quad, lframe, camView,
+		tdraw(lpass, quad, lframe, flyCam.getView(),
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
 			sframe.depth, greenColor, greenView, lightProj);
 
@@ -136,6 +155,7 @@ void main()
 		tdraw(qdraw, quad, screen, lframe.colors[0], mod);
 
 	}
-
+	timer.term();
+	playerInput.term();
 	context.term();
 }

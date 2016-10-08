@@ -3,7 +3,9 @@
 
 #include "Vertex.h"
 #include "window.h"
-
+#include "Camera.h"
+#include "Input.h"
+#include "Timer.h"
 
 #include "globjs.h"
 #include "glmake.h"
