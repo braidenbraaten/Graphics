@@ -5,15 +5,18 @@ bool Timer::init()
 {
 	//start clock at 0
 	glfwSetTime(0);
+
+	currentTime = 0;
+	prevTime    = 0;
+	deltaTime   = 0;
 	return true;
 }
 
 bool Timer::step()
 {
-	prevTime = currentTime;
 	currentTime = getRealTime();
-	deltaTime = currentTime - prevTime;
-
+	deltaTime   = currentTime - prevTime;
+	prevTime	= currentTime;
 	return true;
 }
 

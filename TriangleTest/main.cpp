@@ -67,8 +67,8 @@ void main()
 	// They can all use the same projection matrix...
 	glm::mat4 lightProj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);
 
-	glm::mat4   redView = glm::lookAt(glm::normalize(-glm::vec3(1, -1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::vec4   redColor = glm::vec4(1, 0, 0, 1);
+	glm::mat4   redView = glm::lookAt(glm::normalize(glm::vec3(0,.2f,-1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::vec4   redColor = glm::vec4(.5f, .5f, .5f, 1);
 	glm::vec4   normalColor = glm::vec4(1, 1, 1, 1);
 	glm::mat4 greenView = glm::lookAt(glm::normalize(-glm::vec3(1, 1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	glm::vec4 greenColor = glm::vec4(0, 1, 0, 1);
@@ -80,8 +80,8 @@ void main()
 
 	while (context.step())
 	{
-		time += 0.016f;
 		timer.step();
+		time += timer.getDeltaTime();
 		playerInput.step();
 		flyCam.update(playerInput, timer);
 		
@@ -109,11 +109,14 @@ void main()
 
 		// Shadow PrePass
 		ClearFramebuffer(sframe);
+
+		// lightProj is used by all of the lights so far ( that doesnt have to be true if you dont want it to be though)
+
 		tdraw(spass, spear, sframe, spearModel, redView, lightProj);
 		tdraw(spass, sphere, sframe, sphereModel, redView, lightProj);
 		tdraw(spass, quad, sframe, wallModel, redView, lightProj);
-		tdraw(spass, haloQuad, sframe, halotexModel, redView, lightProj);
-		// Light Aggregation
+		//tdraw(spass, haloQuad, sframe, halotexModel, redView, lightProj);
+		// Add the Red Light
 		tdraw(lpass, quad, lframe, flyCam.getView(),
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],//geo info
 			sframe.depth, redColor, redView, lightProj); //light info
@@ -155,7 +158,8 @@ void main()
 		tdraw(qdraw, quad, screen, lframe.colors[0], mod);
 
 	}
-	timer.term();
+
 	playerInput.term();
 	context.term();
+	timer.term();
 }

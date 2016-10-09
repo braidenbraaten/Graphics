@@ -13,11 +13,13 @@ layout(location = 1) uniform mat4 view;
 layout(location = 2) uniform mat4 proj;
 
 
+
 void main()
 {
 	vNormal = (view * model * normal).xyz;
 	vPosition = (view * model * position).xyz;
 	vUV = texcoord;
+
 
 	gl_Position = proj * view * model * position;
 }
