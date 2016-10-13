@@ -74,7 +74,7 @@ void main()
 	glm::vec4 greenColor = glm::vec4(0, 1, 0, 1);
 
 	
-	glm::mat4 halotexModel;
+	glm::mat4 halotexModel; // Transform given to the halo texture
 
 	float time = 0;
 

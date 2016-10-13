@@ -32,7 +32,8 @@ struct Framebuffer
 	unsigned width, height, nColors;
 	
 	Texture depth;
-	Texture colors[8];
+	//The GLSL outputs
+	Texture colors[8]; 
 
 };
 
