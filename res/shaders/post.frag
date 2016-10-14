@@ -5,14 +5,14 @@ out vec4 outColor;
 in vec2 vUV;
 
 layout(location = 0) uniform sampler2D map;
-\
+
 
 vec4 sobel(in sampler2D map, in vec2 UV);
 vec4 crossblur(in sampler2D map, in vec2 UV);
 
 void main()
 {
-	outColor = crossblur(map, vUV);
+	outColor = sobel(map, vUV);
 }
 
 vec4 crossblur(in sampler2D map, in vec2 UV)

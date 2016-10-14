@@ -38,19 +38,21 @@ void main()
 	//// Note that shadow pass can disable face-culling for some back-shadow improvements.
 	Shader spass = loadShader("../res/shaders/spass.vert", "../res/shaders/spass.frag", true, false, false);
 	Shader lpass = loadShader("../res/shaders/lspass.vert", "../res/shaders/lspass.frag", false, true);
-
+	Shader bloomPass = loadShader("../res/shaders/bloompass.vert", "../res/shaders/bloompass.frag", true, false, false);
+	Shader postPass = loadShader("../res/shaders/post.vert", "../res/shaders/post.frag");
+	Shader cotangentPass = loadShader("../res/shaders/simple.vert", "../res/shaders/simple.frag");
 
 	Framebuffer screen = { 0, 1280, 720 };
 
 	bool flTex[] = { false, true, false, true }; // colors don't need floats, but position/normal should use it.
 	Framebuffer gframe = makeFramebuffer(1280, 720, 4, flTex);
 	Framebuffer lframe = makeFramebuffer(1280, 720, 3);
-
+	Framebuffer bloomFrame = makeFramebuffer(1280, 720, 1);
 
 	// Temporary shadow framebuffer. Will be cleared and reused by each light!
 	// Its RESOLUTION WILL GREATLY EFFECT THE QUALITY. Try playing around with high/low res.
 	Framebuffer sframe = makeFramebuffer(1024, 1024, 0);
-
+	Framebuffer pframe = makeFramebuffer(1280, 720, 1);
 
 
 	// Camera information
@@ -137,13 +139,21 @@ void main()
 
 
 
+
+		ClearFramebuffer(pframe);
+		tdraw(postPass, quad, pframe, gframe.colors[0]);
+
+		///////////////////////////////////////////BLOOM PASS//////////////////////////////////////////////////
+		ClearFramebuffer(bloomFrame);
+		//tdraw(bloomPass, quad, bloomFrame,gframe.colors[0]);
+		tdraw(bloomPass, quad, bloomFrame, pframe.colors[0], time, lframe.colors[1]);
 		//////////////////////////////////////////////////
 		// Debug Rendering Stuff. Just single textures to quads-
 		// drawing most of the images I've gathered so far.
 
 		// note that the sframe (shadow pass) will only be from the most recent light.
 		Texture debug_list[] = { gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
-			gframe.depth, lframe.colors[1], lframe.colors[2], sframe.depth };
+			gframe.depth, lframe.colors[1], lframe.colors[2], sframe.depth, bloomFrame.colors[0], pframe.colors[0], pframe.colors[1] };
 
 		for (int i = 0; i < sizeof(debug_list) / sizeof(Texture); ++i)
 		{

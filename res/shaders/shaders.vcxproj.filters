@@ -31,5 +31,7 @@
     <None Include="lspass.frag" />
     <None Include="lensflare.vert" />
     <None Include="lensflare.frag" />
+    <None Include="bloompass.vert" />
+    <None Include="bloompass.frag" />
   </ItemGroup>
 </Project>
