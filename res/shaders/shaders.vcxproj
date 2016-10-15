@@ -110,8 +110,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="blinn.frag" />
+    <None Include="blinn.vert" />
     <None Include="bloompass.frag" />
     <None Include="bloompass.vert" />
+    <None Include="blur.frag" />
+    <None Include="blur.vert" />
+    <None Include="explode.frag" />
+    <None Include="explode.vert" />
     <None Include="gpass.frag" />
     <None Include="gpass.vert" />
     <None Include="lensflare.frag" />

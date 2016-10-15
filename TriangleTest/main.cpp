@@ -41,6 +41,10 @@ void main()
 	Shader bloomPass = loadShader("../res/shaders/bloompass.vert", "../res/shaders/bloompass.frag", true, false, false);
 	Shader postPass = loadShader("../res/shaders/post.vert", "../res/shaders/post.frag");
 	Shader cotangentPass = loadShader("../res/shaders/simple.vert", "../res/shaders/simple.frag");
+	Shader blinnPass = loadShader("../res/shaders/blinn.vert", "../res/shaders/blinn.frag");
+	Shader blurPass = loadShader("../res/shaders/blur.vert", "../res/shaders/blur.frag");
+	Shader explodepass = loadShader("../res/shaders/explode.vert", "../res/shaders/explode.frag");
+
 
 	Framebuffer screen = { 0, 1280, 720 };
 
@@ -52,9 +56,10 @@ void main()
 	// Temporary shadow framebuffer. Will be cleared and reused by each light!
 	// Its RESOLUTION WILL GREATLY EFFECT THE QUALITY. Try playing around with high/low res.
 	Framebuffer sframe = makeFramebuffer(1024, 1024, 0);
-	Framebuffer pframe = makeFramebuffer(1280, 720, 1);
-
-
+	Framebuffer pframe = makeFramebuffer(1280, 720, 2);
+	Framebuffer blinnframe = makeFramebuffer(1280, 720, 3);
+	Framebuffer blurframe = makeFramebuffer(1280, 720, 1);
+	Framebuffer explodeframe = makeFramebuffer(1280, 720, 1);
 	// Camera information
 	//glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, 4), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	//glm::mat4 camProj = glm::perspective(45.f, 1280.f / 720, 1.f, 100.f);
@@ -68,6 +73,7 @@ void main()
 	// Light Matrices and data
 	// They can all use the same projection matrix...
 	glm::mat4 lightProj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);
+	glm::vec3 lightPos = glm::normalize(glm::vec3(0, .2f, -1));
 
 	glm::mat4   redView = glm::lookAt(glm::normalize(glm::vec3(0,.2f,-1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	glm::vec4   redColor = glm::vec4(.5f, .5f, .5f, 1);
@@ -77,7 +83,9 @@ void main()
 
 	
 	glm::mat4 halotexModel; // Transform given to the halo texture
+	
 
+	glm::mat4 prevView;
 	float time = 0;
 
 	while (context.step())
@@ -91,16 +99,23 @@ void main()
 		spearModel = glm::rotate(time, glm::vec3(0, 1, 0)) * glm::translate(glm::vec3(0, -1, 0));
 		halotexModel = glm::rotate(time, glm::vec3(0,glm::sin(time),0)) *glm::translate(glm::vec3(1, 1, 1));
 
-		/////////////////////////////////////////////////////
-		// Geometry Pass
-		//
+
+		// Geometry pass
 		ClearFramebuffer(gframe);
 		tdraw(gpass, spear, gframe, spearModel, flyCam.getView(), flyCam.getProjection(), spear_diffuse, spear_normal, spear_specular);
 		tdraw(gpass, sphere, gframe, sphereModel, flyCam.getView(), flyCam.getProjection(), white, vertex_normals, white);
 		tdraw(gpass, quad, gframe, wallModel, flyCam.getView(), flyCam.getProjection(), white, vertex_normals, white);
-
-
 		tdraw(gpass, haloQuad, gframe, halotexModel,flyCam.getView(), flyCam.getProjection(), HaloTexture, vertex_normals, white);
+
+		//explode pass
+
+		ClearFramebuffer(explodeframe);
+		tdraw(explodepass, quad, explodeframe, gframe.colors[0], time);// vert normal, time, 
+
+		//   NOT WORKING!
+		//ClearFramebuffer(blurframe);
+		//tdraw(blurPass, quad, blurframe,       gframe.colors[0], screen.colors[0]);
+		//prevView = flyCam.getView();
 
 		/////////////////////////////////////////////////////
 		//// Light pass!
@@ -121,7 +136,7 @@ void main()
 		// Add the Red Light
 		tdraw(lpass, quad, lframe, flyCam.getView(),
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],//geo info
-			sframe.depth, redColor, redView, lightProj); //light info
+			sframe.depth, redColor, redView,lightProj); //light info
 
 		//////////////////////////
 		// Green light!
@@ -141,19 +156,19 @@ void main()
 
 
 		ClearFramebuffer(pframe);
-		tdraw(postPass, quad, pframe, gframe.colors[0]);
+		tdraw(postPass, quad, pframe, gframe.colors[0], time, bloomFrame.colors[0]);
 
 		///////////////////////////////////////////BLOOM PASS//////////////////////////////////////////////////
 		ClearFramebuffer(bloomFrame);
 		//tdraw(bloomPass, quad, bloomFrame,gframe.colors[0]);
-		tdraw(bloomPass, quad, bloomFrame, pframe.colors[0], time, lframe.colors[1]);
-		//////////////////////////////////////////////////
-		// Debug Rendering Stuff. Just single textures to quads-
-		// drawing most of the images I've gathered so far.
+		tdraw(bloomPass, quad, bloomFrame, pframe.colors[0], time, lframe.colors[0]);
+
+
 
 		// note that the sframe (shadow pass) will only be from the most recent light.
-		Texture debug_list[] = { gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
-			gframe.depth, lframe.colors[1], lframe.colors[2], sframe.depth, bloomFrame.colors[0], pframe.colors[0], pframe.colors[1] };
+		Texture debug_list[] = { gframe.colors[0]    , gframe.colors[1], gframe.colors[2], gframe.colors[3]    ,
+							     gframe.depth        , lframe.colors[1], lframe.colors[2], sframe.depth        ,
+								 bloomFrame.colors[0], pframe.colors[0], pframe.colors[1], explodeframe.colors[0] };
 
 		for (int i = 0; i < sizeof(debug_list) / sizeof(Texture); ++i)
 		{

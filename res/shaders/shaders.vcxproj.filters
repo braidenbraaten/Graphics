@@ -33,5 +33,11 @@
     <None Include="lensflare.frag" />
     <None Include="bloompass.vert" />
     <None Include="bloompass.frag" />
+    <None Include="blinn.vert" />
+    <None Include="blinn.frag" />
+    <None Include="blur.vert" />
+    <None Include="blur.frag" />
+    <None Include="explode.vert" />
+    <None Include="explode.frag" />
   </ItemGroup>
 </Project>
