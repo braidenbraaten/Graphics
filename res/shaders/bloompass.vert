@@ -8,7 +8,7 @@ out float deltaTime;
 
 void main()
 {
-
+	position;// += cos(time);
 	vUV = texcoord;
 	deltaTime = time;
 	gl_Position = position;

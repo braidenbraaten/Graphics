@@ -6,15 +6,16 @@ layout(location = 1) uniform float time;
 
 out vec2 vUV;
 
-vec4 warp(in vec4 pos, in vec2 UV);
+vec4 warp(in vec4 pos, in float offset);
 
 void main()
 {
+	 
 	vUV = UV;
-	gl_Position = position + warp();
+	gl_Position = position;// + warp(position, time );
 }
 
-vec4 warp(in vec4 pos, in vec2 UV)
+vec4 warp(in vec4 pos, in float offset)
 {
 	vec4 result;
 
@@ -22,7 +23,7 @@ vec4 warp(in vec4 pos, in vec2 UV)
 	{
 		for(int j = -5; j < 5; j++)
 		{
-			result += 
+			result += pos + offset * 50;
 		}
 	}
 

@@ -1,22 +1,25 @@
 #version 430
 
-out vec4 outColor;
-out vec4 crossColor;
+layout(location = 0) out vec4 outColor;
+layout(location = 1) out vec4 crossColor;
 
 in vec2 vUV;
 
 layout(location = 0) uniform sampler2D map;
 layout(location = 1) uniform float time;
 layout(location = 2) uniform sampler2D bloom;
-
+layout(location = 3) uniform sampler2D light;
+layout(location = 4) uniform sampler2D shadow;
 vec4 sobel(in sampler2D map, in vec2 UV);
 vec4 crossblur(in sampler2D map, in vec2 UV);
 
 void main()
-{
+{	
 	vec4 b = texture(bloom, vUV);
+	vec4 l = texture(light, vUV);
+	vec4 s = texture(shadow, vUV);
 	outColor   = sobel    (map, vUV);
-	crossColor = crossblur(map, vUV) /  (outColor - b) ;
+	crossColor = crossblur(map, vUV) + l + s;// outColor ;
 }
 
 vec4 crossblur(in sampler2D map, in vec2 UV)

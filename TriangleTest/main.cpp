@@ -156,7 +156,7 @@ void main()
 
 
 		ClearFramebuffer(pframe);
-		tdraw(postPass, quad, pframe, gframe.colors[0], time, bloomFrame.colors[0]);
+		tdraw(postPass, quad, pframe, gframe.colors[0], time, bloomFrame.colors[0], lframe.colors[0], sframe.colors[0]);
 
 		///////////////////////////////////////////BLOOM PASS//////////////////////////////////////////////////
 		ClearFramebuffer(bloomFrame);
